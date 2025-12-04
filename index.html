@@ -179,7 +179,7 @@
     <div class="offwork-bar-wrap">
       <div class="offwork-bar-label">游戏开始后，需要多次点击：当光点移动到绿色区域时，立即点击按钮/按空格键停下它。每轮都会重新开始！👇</div>
       <div class="offwork-bar" id="owBar">
-        <div class="offwork-target" id="owTarget"></div>
+        <div class="offwork-target" id="owTarget" style="left: 40%; width: 20%;"></div>
         <div class="offwork-dot" id="owDot"></div>
       </div>
     </div>
@@ -239,10 +239,15 @@
     // 目标区域设置在进度条中间 20%
     const barWidth = barEl.clientWidth || 300;
     const widthPct = 20; // 20%
-    tStart = (100 - widthPct) / 2;
-    tEnd   = tStart + widthPct;
-    targetEl.style.left  = tStart + "%";
+    tStart = (100 - widthPct) / 2;  // 40%
+    tEnd   = tStart + widthPct;     // 60%
+    
+    // 确保目标区域可见
+    targetEl.style.left = tStart + "%";
     targetEl.style.width = widthPct + "%";
+    targetEl.style.display = "block";
+    targetEl.style.visibility = "visible";
+    targetEl.style.opacity = "1";
 
     updateDot();
   }
@@ -368,8 +373,23 @@
     }
   });
 
-  // 初始化
-  resetGame();
+  // 初始化 - 确保DOM加载完成后再设置目标区域
+  function initGame() {
+    // 确保bar元素有宽度后再设置目标
+    if (barEl.clientWidth === 0) {
+      // 如果bar还没有宽度，等待一下再初始化
+      setTimeout(initGame, 50);
+      return;
+    }
+    resetGame();
+  }
+
+  // 页面加载完成后初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGame);
+  } else {
+    initGame();
+  }
 })();
 </script>
 
