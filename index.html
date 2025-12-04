@@ -180,7 +180,7 @@
       <div class="offwork-bar-label">游戏开始后，需要多次点击：当光点移动到绿色区域时，立即点击按钮/按空格键停下它。每轮都会重新开始！👇</div>
       <div class="offwork-bar" id="owBar">
         <div class="offwork-target" id="owTarget" style="left: 40%; width: 20%;"></div>
-        <div class="offwork-dot" id="owDot"></div>
+        <div class="offwork-dot" id="owDot" style="left: 0%;"></div>
       </div>
     </div>
 
@@ -271,6 +271,8 @@
     running = true;
     msgEl.textContent = "";
     msgEl.classList.remove("success");
+    // 确保dot位置已更新
+    updateDot();
     animId = requestAnimationFrame(loop);
   }
 
@@ -284,6 +286,9 @@
     if (!running && score === 0 && hearts === 3 && !resultEl.textContent) {
       // 第一局点击：开始游戏
       btnEl.textContent = "点击 / 空格 · 准点打卡！";
+      // 确保dot从可见位置开始
+      pos = 0;
+      updateDot();
       startLoop();
       return;
     }
