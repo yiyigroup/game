@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>游戏合集 - 准点下班大作战 & 掼蛋基础功 & 疯狂抢红包</title>
+  <title>游戏合集 - 准点下班大作战 & 掼蛋基础功 & 疯狂抢红包 & 甜品翻翻乐</title>
   <style>
     body {
       margin: 0;
@@ -504,6 +504,171 @@
       font-size: 12px;
       color: #9a6841;
       margin-top: 6px;
+    }
+
+    /* 甜品翻翻乐游戏样式 */
+    .sweet-multiline { white-space: pre-line; }
+
+    .sweet-game-wrapper {
+      max-width: 520px;
+      margin: 40px auto 0;
+      padding: 16px 12px 32px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC",
+                   "Microsoft YaHei", sans-serif;
+      color: #5b3b2a;
+      text-align: center;
+    }
+
+    .sweet-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .sweet-subtitle {
+      font-size: 13px;
+      color: #8b6f53;
+      margin-bottom: 10px;
+    }
+
+    .sweet-card {
+      background: radial-gradient(circle at top, #fff7ee 0, #ffe3d1 42%, #ffd2c7 100%);
+      border-radius: 18px;
+      box-shadow: 0 12px 26px rgba(172, 104, 64, 0.28);
+      padding: 14px 12px 18px;
+    }
+
+    .sweet-info-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #7b543a;
+    }
+
+    .sweet-info-bar span strong {
+      font-size: 16px;
+      margin-left: 3px;
+    }
+
+    /* 棋盘区域 */
+    .sweet-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 0 auto;
+      max-width: 360px;
+    }
+
+    .sweet-card-item {
+      position: relative;
+      width: 100%;
+      padding-top: 120%; /* 保持方形偏高一点 */
+      perspective: 800px;
+      cursor: pointer;
+    }
+
+    .sweet-card-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      transform-style: preserve-3d;
+      transition: transform 0.3s ease;
+    }
+
+    .sweet-card-item.flipped .sweet-card-inner,
+    .sweet-card-item.matched .sweet-card-inner {
+      transform: rotateY(180deg);
+      cursor: default;
+    }
+
+    .sweet-face,
+    .sweet-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .sweet-back {
+      background: linear-gradient(135deg, #ffb3b3, #ff7c9b);
+      box-shadow: 0 6px 12px rgba(199, 93, 112, 0.5);
+      color: #fff;
+      font-size: 18px;
+      letter-spacing: 2px;
+    }
+
+    .sweet-face {
+      transform: rotateY(180deg);
+      background: #fffdf7;
+      box-shadow: 0 6px 12px rgba(173, 125, 84, 0.35);
+      font-size: 30px;
+    }
+
+    .sweet-card-item.matched .sweet-face {
+      box-shadow: 0 0 0 2px rgba(255, 164, 164, 0.9),
+                  0 0 12px rgba(255, 140, 140, 0.7);
+    }
+
+    /* 按钮 */
+    .sweet-btn {
+      width: 100%;
+      border: none;
+      outline: none;
+      border-radius: 999px;
+      padding: 9px 14px;
+      margin-top: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      background: linear-gradient(135deg, #ff7da0, #ffb347);
+      color: #fffdf7;
+      box-shadow: 0 8px 18px rgba(255, 143, 139, 0.5);
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+
+    .sweet-btn:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 4px 10px rgba(255, 143, 139, 0.45);
+      filter: brightness(0.96);
+    }
+
+    /* 结果 & 文案 */
+    .sweet-result {
+      font-size: 14px;
+      color: #7b543a;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .sweet-result strong {
+      font-size: 16px;
+      color: #d6522f;
+    }
+
+    .sweet-tip {
+      font-size: 12px;
+      color: #9e7b60;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 400px) {
+      .sweet-grid {
+        gap: 6px;
+      }
+      .sweet-face {
+        font-size: 26px;
+      }
+      .sweet-back {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
@@ -1142,6 +1307,200 @@
     }
 
     startBtn.addEventListener("click", startGame);
+  })();
+</script>
+
+<!-- 甜品翻翻乐游戏 -->
+<div class="sweet-game-wrapper">
+  <div class="sweet-title">🍰 甜品翻翻乐</div>
+  <div class="sweet-subtitle">找出相同的甜品情侣卡，一起来考验记忆力～</div>
+
+  <div class="sweet-card">
+    <div class="sweet-info-bar">
+      <span>步数：<strong id="sweetMoves">0</strong></span>
+      <span>用时：<strong id="sweetTime">0</strong> s</span>
+    </div>
+
+    <div id="sweetGrid" class="sweet-grid"></div>
+
+    <button id="sweetRestart" class="sweet-btn">重新开局</button>
+
+    <div id="sweetResult" class="sweet-result"></div>
+    <div class="sweet-tip">小提示：越少步数完成，说明你的大脑越"甜"～</div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const emojis = [
+      "🧁","🍰","🍩","🍓",
+      "🧋","🍪","🍮","🍦"
+    ]; // 8 对，可以自行换成你想要的
+
+    const gridEl = document.getElementById("sweetGrid");
+    const movesEl = document.getElementById("sweetMoves");
+    const timeEl = document.getElementById("sweetTime");
+    const restartBtn = document.getElementById("sweetRestart");
+    const resultEl = document.getElementById("sweetResult");
+
+    let cardsData = [];
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let moves = 0;
+    let time = 0;
+    let timerId = null;
+    let matchedPairs = 0;
+    const totalPairs = emojis.length;
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function startTimer() {
+      if (timerId) return;
+      timerId = setInterval(() => {
+        time++;
+        timeEl.textContent = time;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timerId) {
+        clearInterval(timerId);
+        timerId = null;
+      }
+    }
+
+    function createBoard() {
+      // 重置状态
+      gridEl.innerHTML = "";
+      cardsData = [];
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+      moves = 0;
+      time = 0;
+      matchedPairs = 0;
+      movesEl.textContent = "0";
+      timeEl.textContent = "0";
+      resultEl.textContent = "";
+      stopTimer();
+
+      // 生成一副牌：每个 emoji 两张
+      const fullSet = shuffle(
+        emojis.concat(emojis).map((emoji, index) => ({
+          id: index,
+          value: emoji,
+        }))
+      );
+
+      cardsData = fullSet;
+
+      fullSet.forEach(card => {
+        const item = document.createElement("div");
+        item.className = "sweet-card-item";
+        item.dataset.id = card.id;
+        item.dataset.value = card.value;
+
+        const inner = document.createElement("div");
+        inner.className = "sweet-card-inner";
+
+        const back = document.createElement("div");
+        back.className = "sweet-back";
+        back.textContent = "甜品";
+
+        const face = document.createElement("div");
+        face.className = "sweet-face";
+        face.textContent = card.value;
+
+        inner.appendChild(back);
+        inner.appendChild(face);
+        item.appendChild(inner);
+
+        item.addEventListener("click", () => onCardClick(item));
+
+        gridEl.appendChild(item);
+      });
+    }
+
+    function onCardClick(cardEl) {
+      if (lockBoard) return;
+      if (cardEl.classList.contains("flipped") ||
+          cardEl.classList.contains("matched")) return;
+
+      // 第一点击时启动计时器
+      if (!timerId) {
+        startTimer();
+      }
+
+      cardEl.classList.add("flipped");
+
+      if (!firstCard) {
+        firstCard = cardEl;
+        return;
+      }
+
+      secondCard = cardEl;
+      lockBoard = true;
+      moves++;
+      movesEl.textContent = moves;
+
+      const value1 = firstCard.dataset.value;
+      const value2 = secondCard.dataset.value;
+
+      if (value1 === value2) {
+        // 匹配成功
+        setTimeout(() => {
+          firstCard.classList.add("matched");
+          secondCard.classList.add("matched");
+          resetTurn();
+          matchedPairs++;
+          if (matchedPairs === totalPairs) {
+            gameWin();
+          }
+        }, 260);
+      } else {
+        // 不匹配，翻回去
+        setTimeout(() => {
+          firstCard.classList.remove("flipped");
+          secondCard.classList.remove("flipped");
+          resetTurn();
+        }, 650);
+      }
+    }
+
+    function resetTurn() {
+      [firstCard, secondCard] = [null, null];
+      lockBoard = false;
+    }
+
+    function gameWin() {
+      stopTimer();
+
+      let comment = "";
+      if (moves <= 14) {
+        comment = "记忆力爆表！可以去参加记忆大师比赛那种～";
+      } else if (moves <= 20) {
+        comment = "很棒！说明你大脑甜度刚刚好 🍯";
+      } else if (moves <= 28) {
+        comment = "不错不错，再来一局说不定就进阶小甜心大师～";
+      } else {
+        comment = "别急，玩几局暖暖机，甜品都会记住自己的位置～";
+      }
+
+      resultEl.innerHTML =
+        `完成啦！共用了 <strong>${moves}</strong> 步，<strong>${time}</strong> 秒。<br>${comment}`;
+    }
+
+    restartBtn.addEventListener("click", createBoard);
+
+    // 初始化
+    createBoard();
   })();
 </script>
 
