@@ -93,12 +93,14 @@
     .offwork-dot {
       position: absolute;
       top: 50%;
+      left: 0%;
       width: 20px;
       height: 20px;
       border-radius: 999px;
       background: radial-gradient(circle at 30% 30%,#fefce8,#facc15,#eab308);
       box-shadow: 0 0 10px rgba(250,204,21,0.9);
       transform: translate(-50%, -50%);
+      z-index: 10;
     }
 
     /* 按钮 */
@@ -205,6 +207,12 @@
   const heartsEl = document.getElementById("owHearts");
   const resultEl = document.getElementById("owResult");
 
+  // 检查所有元素是否找到
+  if (!dotEl || !targetEl || !barEl || !btnEl) {
+    console.error("Game elements not found!");
+    return;
+  }
+
   let pos = 0;          // 0 ~ 100
   let dir = 1;          // 1 向右, -1 向左
   let speed = 0.5;      // 每帧移动多少百分比
@@ -249,7 +257,9 @@
 
   function updateDot() {
     // 把 pos(0~100) 转换为条上的 left 百分比
-    dotEl.style.left = pos + "%";
+    if (dotEl) {
+      dotEl.style.left = pos + "%";
+    }
   }
 
   function loop() {
@@ -273,6 +283,7 @@
     msgEl.classList.remove("success");
     // 确保dot位置已更新
     updateDot();
+    // 立即开始动画循环
     animId = requestAnimationFrame(loop);
   }
 
