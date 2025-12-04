@@ -168,7 +168,7 @@
 
 <div class="offwork-wrapper">
   <div class="offwork-title">🕕 准点下班大作战</div>
-  <div class="offwork-sub">看你能准点下班几次？踩准节奏条绿色区域，就算成功打卡！</div>
+  <div class="offwork-sub">看你能准点下班几次？游戏会持续多轮，每次光点走到绿色区域时点击按钮/空格键停下它，成功打卡！</div>
 
   <div class="offwork-card">
     <div class="offwork-info">
@@ -177,7 +177,7 @@
     </div>
 
     <div class="offwork-bar-wrap">
-      <div class="offwork-bar-label">点击按钮 / 按空格键，在光点走到绿色区域时停下它👇</div>
+      <div class="offwork-bar-label">游戏开始后，需要多次点击：当光点移动到绿色区域时，立即点击按钮/按空格键停下它。每轮都会重新开始！👇</div>
       <div class="offwork-bar" id="owBar">
         <div class="offwork-target" id="owTarget"></div>
         <div class="offwork-dot" id="owDot"></div>
@@ -189,7 +189,7 @@
     <div id="owMsg" class="offwork-msg"></div>
     <div id="owResult" class="offwork-result"></div>
     <div class="offwork-tip">
-      成功一次会提速一点点；连续失误 3 次，说明你已经被"加班文化"包围了 😭
+      💡 提示：游戏会持续多轮，每次成功都会提速。连续失误 3 次游戏结束。看你能坚持几轮？😭
     </div>
   </div>
 </div>
@@ -283,7 +283,7 @@
   function handleClick() {
     if (!running && score === 0 && hearts === 3 && !resultEl.textContent) {
       // 第一局点击：开始游戏
-      btnEl.textContent = "点击 / 空格 · 准点打卡！";
+      btnEl.textContent = "继续点击 / 空格 · 在绿色区域停下！";
       startLoop();
       return;
     }
