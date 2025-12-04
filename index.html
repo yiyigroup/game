@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>游戏合集 - 准点下班大作战 & 掼蛋基础功</title>
+  <title>游戏合集 - 准点下班大作战 & 掼蛋基础功 & 疯狂抢红包</title>
   <style>
     body {
       margin: 0;
@@ -347,6 +347,163 @@
       color: #b91c1c;
       min-height: 16px;
       margin-bottom: 4px;
+    }
+
+    /* 疯狂抢红包游戏样式 */
+    .hb-game-wrapper {
+      max-width: 480px;
+      margin: 40px auto 0;
+      padding: 16px 12px 32px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC",
+                   "Microsoft YaHei", sans-serif;
+      color: #4b1a07;
+      text-align: center;
+      position: relative;
+    }
+
+    .hb-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .hb-subtitle {
+      font-size: 13px;
+      color: #8b5a2b;
+      margin-bottom: 10px;
+    }
+
+    .hb-card {
+      background: linear-gradient(145deg, #fff5eb, #ffe7d2);
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(184, 71, 0, 0.18);
+      padding: 14px 10px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hb-info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      margin-bottom: 8px;
+      padding: 0 4px;
+      color: #7a3411;
+    }
+
+    .hb-info-bar span strong {
+      font-size: 16px;
+      margin-left: 3px;
+    }
+
+    /* 游戏区域 */
+    .hb-game-area {
+      position: relative;
+      width: 100%;
+      height: 60vh;
+      max-height: 420px;
+      min-height: 260px;
+      margin: 6px auto 10px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top, #ffe1c3 0, #ffb995 40%, #ff8a5a 100%);
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    /* 掉落红包 */
+    .hb-envelope {
+      position: absolute;
+      width: 44px;
+      height: 54px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #ff2b2b, #c41010);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffd966;
+      font-size: 24px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .hb-envelope::before {
+      content: "¥";
+      font-weight: 700;
+      transform: translateY(-1px);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.35);
+    }
+
+    /* 点击特效 +1 */
+    .hb-pop {
+      position: absolute;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff6d5;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+      animation: hb-pop-move 600ms ease-out forwards;
+    }
+
+    @keyframes hb-pop-move {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-35px); }
+    }
+
+    /* 按钮 */
+    .hb-btn {
+      width: 100%;
+      border: none;
+      outline: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      margin-top: 4px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      background: linear-gradient(135deg, #ff4d2e, #ffb02e);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(253, 98, 40, 0.4);
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+
+    .hb-btn:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 4px 10px rgba(253, 98, 40, 0.35);
+      filter: brightness(0.96);
+    }
+
+    .hb-btn[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* 结果提示 */
+    .hb-result {
+      font-size: 14px;
+      margin-top: 10px;
+      color: #7a3411;
+      line-height: 1.5;
+    }
+
+    .hb-result strong {
+      font-size: 18px;
+      color: #d6330a;
+    }
+
+    .hb-hidden {
+      display: none;
+    }
+
+    /* 小提示文案 */
+    .hb-tip {
+      font-size: 12px;
+      color: #9a6841;
+      margin-top: 6px;
     }
   </style>
 </head>
@@ -803,6 +960,185 @@
       }
       resultEl.innerHTML =
         `本局得分 <strong>${score}</strong> 分（对子 2 分 / 炸弹 8 分）<br>${comment}`;
+    }
+
+    startBtn.addEventListener("click", startGame);
+  })();
+</script>
+
+<!-- 疯狂抢红包游戏 -->
+<div class="hb-game-wrapper">
+  <div class="hb-title">🧧 疯狂抢红包 🧧</div>
+  <div class="hb-subtitle">手速党专属 · 30 秒看看你能抢多少个？</div>
+
+  <div class="hb-card">
+    <div class="hb-info-bar">
+      <span>时间：<strong id="hbTime">30</strong> s</span>
+      <span>得分：<strong id="hbScore">0</strong></span>
+    </div>
+    <div id="hbGameArea" class="hb-game-area"></div>
+    <button id="hbStartBtn" class="hb-btn">开始抢红包</button>
+    <div id="hbResult" class="hb-result hb-hidden"></div>
+    <div class="hb-tip">提示：疯狂点红包就对了，越快越赚！</div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const gameArea = document.getElementById("hbGameArea");
+    const startBtn = document.getElementById("hbStartBtn");
+    const timeEl = document.getElementById("hbTime");
+    const scoreEl = document.getElementById("hbScore");
+    const resultEl = document.getElementById("hbResult");
+
+    let score = 0;
+    let timeLeft = 30;
+    let timerId = null;
+    let spawnId = null;
+    let running = false;
+    const envelopes = []; // {el, x, y, speed}
+    let lastTime = null;
+
+    function gameLoop(timestamp) {
+      if (!running) return;
+      if (!lastTime) lastTime = timestamp;
+      const delta = timestamp - lastTime; // ms
+      lastTime = timestamp;
+      const height = gameArea.clientHeight;
+
+      for (let i = envelopes.length - 1; i >= 0; i--) {
+        const env = envelopes[i];
+        env.y += env.speed * (delta / 16.67); // 按 60fps 做基准
+
+        if (env.y > height + 80) {
+          // 掉出屏幕，移除
+          gameArea.removeChild(env.el);
+          envelopes.splice(i, 1);
+        } else {
+          env.el.style.transform = `translate(${env.x}px, ${env.y}px)`;
+        }
+      }
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    function spawnEnvelope() {
+      const width = gameArea.clientWidth;
+      if (!width) return;
+
+      const el = document.createElement("div");
+      el.className = "hb-envelope";
+      // 左右随机位置，略微留白
+      const maxX = width - 50;
+      const x = Math.random() * maxX;
+      const y = -70;
+      const speed = 2 + Math.random() * 2.5; // 速度 2~4.5
+
+      // 点击事件
+      el.addEventListener("click", function (e) {
+        if (!running) return;
+        score++;
+        scoreEl.textContent = score;
+
+        // 点击 +1 特效
+        const rect = gameArea.getBoundingClientRect();
+        const pop = document.createElement("div");
+        pop.className = "hb-pop";
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        pop.style.left = (clientX - rect.left - 6) + "px";
+        pop.style.top = (clientY - rect.top - 10) + "px";
+        pop.textContent = "+1";
+        gameArea.appendChild(pop);
+        setTimeout(() => {
+          if (pop.parentNode) pop.parentNode.removeChild(pop);
+        }, 600);
+
+        // 移除红包
+        const idx = envelopes.findIndex(obj => obj.el === el);
+        if (idx !== -1) {
+          envelopes.splice(idx, 1);
+        }
+        if (el.parentNode) el.parentNode.removeChild(el);
+      }, { passive: true });
+
+      // 支持手机点：用 pointer / touch 也可以
+      el.addEventListener("touchstart", function (e) {
+        e.preventDefault();
+        el.click();
+      }, { passive: false });
+
+      gameArea.appendChild(el);
+      envelopes.push({ el, x, y, speed });
+      el.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    function startGame() {
+      if (running) return;
+      running = true;
+      score = 0;
+      timeLeft = 30;
+      scoreEl.textContent = score;
+      timeEl.textContent = timeLeft;
+      resultEl.classList.add("hb-hidden");
+      resultEl.textContent = "";
+
+      // 清空旧红包
+      envelopes.splice(0, envelopes.length);
+      while (gameArea.firstChild) {
+        gameArea.removeChild(gameArea.firstChild);
+      }
+
+      startBtn.disabled = true;
+      startBtn.textContent = "抢到手软中…";
+
+      // 定时器：倒计时
+      if (timerId) clearInterval(timerId);
+      timerId = setInterval(() => {
+        timeLeft--;
+        timeEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+
+      // 定时器：生成红包
+      if (spawnId) clearInterval(spawnId);
+      spawnId = setInterval(() => {
+        // 每秒生成 3~5 个红包
+        const count = 3 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < count; i++) {
+          setTimeout(spawnEnvelope, i * 120);
+        }
+      }, 1000);
+
+      lastTime = null;
+      requestAnimationFrame(gameLoop);
+    }
+
+    function endGame() {
+      running = false;
+      startBtn.disabled = false;
+      startBtn.textContent = "再抢一局";
+      if (timerId) clearInterval(timerId);
+      if (spawnId) clearInterval(spawnId);
+      timerId = null;
+      spawnId = null;
+
+      let comment = "";
+      if (score >= 40) {
+        comment = "你这手速，群里发红包必须第一个抢完那种！";
+      } else if (score >= 25) {
+        comment = "优秀！已经是资深手速党了～";
+      } else if (score >= 10) {
+        comment = "还可以再练练，下一局直接起飞！";
+      } else {
+        comment = "别急别急，多玩几局手就热起来了～";
+      }
+
+      resultEl.innerHTML =
+        `本局共抢到 <strong>${score}</strong> 个红包<br>${comment}`;
+      resultEl.classList.remove("hb-hidden");
     }
 
     startBtn.addEventListener("click", startGame);
