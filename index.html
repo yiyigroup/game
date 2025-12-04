@@ -400,7 +400,8 @@
 
   let pos = 0;          // 0 ~ 100
   let dir = 1;          // 1 向右, -1 向左
-  let speed = 0.5;      // 每帧移动多少百分比
+  // 根据设备类型设置初始速度：移动设备更快
+  let speed = window.innerWidth < 768 ? 1.2 : 0.8;      // 每帧移动多少百分比
   let running = false;
   let animId = null;
   let score = 0;
@@ -417,7 +418,8 @@
   function resetGame() {
     score = 0;
     hearts = 3;
-    speed = 0.5;
+    // 根据设备类型设置初始速度：移动设备更快
+    speed = window.innerWidth < 768 ? 1.2 : 0.8;
     pos = 0;
     dir = 1;
     running = false;
@@ -508,8 +510,8 @@
       msgEl.textContent = "准点下班成功！今天可以发个朋友圈了～";
       msgEl.classList.add("success");
 
-      // 每成功一次稍微提速一点
-      speed += 0.1;
+      // 每成功一次提速：移动设备提速更快
+      speed += window.innerWidth < 768 ? 0.2 : 0.15;
       // 下一轮重新跑 - 增加延迟时间，让用户能看到成功消息
       setTimeout(() => {
         if (hearts > 0) {
