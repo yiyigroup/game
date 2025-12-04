@@ -59,6 +59,7 @@
     /* 进度条区域 */
     .offwork-bar-wrap {
       margin: 10px 0 4px;
+      position: relative;
     }
 
     .offwork-bar-label {
@@ -101,6 +102,17 @@
       box-shadow: 0 0 10px rgba(250,204,21,0.9);
       transform: translate(-50%, -50%);
       z-index: 10;
+    }
+
+    /* 指向绿色区域的指针 */
+    .offwork-pointer {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+      z-index: 5;
+      pointer-events: none;
     }
 
     /* 按钮 */
@@ -179,10 +191,11 @@
     </div>
 
     <div class="offwork-bar-wrap">
-      <div class="offwork-bar-label">游戏开始后，需要多次点击：当光点移动到绿色区域时，立即点击按钮/按空格键停下它。每轮都会重新开始！👇</div>
+      <div class="offwork-bar-label">游戏开始后，需要多次点击：当光点移动到绿色区域时，立即点击按钮/按空格键停下它。每轮都会重新开始！</div>
       <div class="offwork-bar" id="owBar">
         <div class="offwork-target" id="owTarget" style="left: 40%; width: 20%;"></div>
         <div class="offwork-dot" id="owDot" style="left: 0%;"></div>
+        <div class="offwork-pointer">👇</div>
       </div>
     </div>
 
