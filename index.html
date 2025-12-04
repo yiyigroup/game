@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>准点下班大作战</title>
+  <title>游戏合集 - 准点下班大作战 & 掼蛋基础功</title>
   <style>
     body {
       margin: 0;
@@ -175,6 +175,178 @@
       font-size: 12px;
       color: #9ca3af;
       margin-top: 4px;
+    }
+
+    /* 掼蛋游戏样式 */
+    .gd-game-wrapper {
+      max-width: 520px;
+      margin: 40px auto 0;
+      padding: 16px 12px 32px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC",
+                   "Microsoft YaHei", sans-serif;
+      color: #243b53;
+      text-align: center;
+    }
+
+    .gd-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .gd-subtitle {
+      font-size: 13px;
+      color: #6c7a89;
+      margin-bottom: 10px;
+    }
+
+    .gd-card {
+      background: radial-gradient(circle at top, #f5f7fa 0, #e8edf4 42%, #dde5f0 100%);
+      border-radius: 18px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+      padding: 14px 12px 18px;
+    }
+
+    .gd-info-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #4b5563;
+    }
+
+    .gd-info-bar span strong {
+      font-size: 16px;
+      margin-left: 3px;
+    }
+
+    .gd-table {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 6px;
+      justify-items: center;
+      margin: 0 auto 8px;
+      max-width: 480px;
+    }
+
+    @media (max-width: 480px) {
+      .gd-table {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .gd-card-item {
+      position: relative;
+      width: 100%;
+      padding-top: 145%; /* 扑克牌比例 */
+      cursor: pointer;
+    }
+
+    .gd-card-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0 4px 8px rgba(148, 163, 184, 0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 4px 4px;
+      box-sizing: border-box;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border 0.12s ease;
+      border: 2px solid transparent;
+    }
+
+    .gd-card-inner.red {
+      color: #b91c1c;
+    }
+
+    .gd-card-inner.black {
+      color: #111827;
+    }
+
+    .gd-card-inner.small {
+      font-size: 10px;
+    }
+
+    .gd-rank-top,
+    .gd-rank-bottom {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .gd-rank-bottom {
+      transform: rotate(180deg);
+      align-self: flex-end;
+    }
+
+    .gd-suit-center {
+      font-size: 18px;
+    }
+
+    .gd-card-item.selected .gd-card-inner {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.5),
+                  0 6px 14px rgba(56, 189, 248, 0.6);
+      transform: translateY(-1px);
+    }
+
+    .gd-card-item.removed {
+      visibility: hidden;
+    }
+
+    .gd-btn {
+      width: 100%;
+      border: none;
+      outline: none;
+      border-radius: 999px;
+      padding: 9px 14px;
+      margin-top: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+      color: #eff6ff;
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.5);
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+
+    .gd-btn:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.45);
+      filter: brightness(0.96);
+    }
+
+    .gd-btn[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .gd-result {
+      font-size: 14px;
+      color: #4b5563;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .gd-result strong {
+      color: #0f766e;
+      font-size: 16px;
+    }
+
+    .gd-tip {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    .gd-msg {
+      font-size: 12px;
+      color: #b91c1c;
+      min-height: 16px;
+      margin-bottom: 4px;
     }
   </style>
 </head>
@@ -400,6 +572,239 @@
   // 初始化
   resetGame();
 })();
+</script>
+
+<!-- 掼蛋基础功游戏 -->
+<div class="gd-game-wrapper">
+  <div class="gd-title">🃏 掼蛋基础功 · 找对子训练营</div>
+  <div class="gd-subtitle">在 30 秒内尽量多找"对子"和"炸弹"！同点数 2 张=对子，4 张=炸弹。</div>
+
+  <div class="gd-card">
+    <div class="gd-info-bar">
+      <span>时间：<strong id="gdTime">30</strong> s</span>
+      <span>得分：<strong id="gdScore">0</strong></span>
+    </div>
+    <div id="gdMsg" class="gd-msg"></div>
+    <div id="gdTable" class="gd-table"></div>
+    <button id="gdStartBtn" class="gd-btn">开始训练</button>
+    <div id="gdResult" class="gd-result"></div>
+    <div class="gd-tip">玩法说明：点击牌选中，再点击其他同点数牌。<br>
+      2 张同点数 = 对子（+2 分）；4 张同点数 = 炸弹（+8 分）。</div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const ranksOrder = ["3","4","5","6","7","8","9","10","J","Q","K","A","2"];
+    const suits = [
+      { symbol: "♠", color: "black" },
+      { symbol: "♥", color: "red" },
+      { symbol: "♣", color: "black" },
+      { symbol: "♦", color: "red" },
+    ];
+
+    const tableEl = document.getElementById("gdTable");
+    const timeEl = document.getElementById("gdTime");
+    const scoreEl = document.getElementById("gdScore");
+    const msgEl = document.getElementById("gdMsg");
+    const startBtn = document.getElementById("gdStartBtn");
+    const resultEl = document.getElementById("gdResult");
+
+    let cards = [];
+    let selectedIds = [];
+    let timeLeft = 30;
+    let timerId = null;
+    let running = false;
+    let score = 0;
+
+    function createDeck() {
+      const deck = [];
+      for (const rank of ranksOrder) {
+        for (const s of suits) {
+          deck.push({
+            id: rank + s.symbol + Math.random().toString(16).slice(2,8),
+            rank,
+            suit: s.symbol,
+            color: s.color,
+            removed: false,
+          });
+        }
+      }
+      // 加上大小王
+      deck.push({ id: "joker-small", rank: "小王", suit: "☆", color: "black", removed: false });
+      deck.push({ id: "joker-big", rank: "大王", suit: "★", color: "red", removed: false });
+      return deck;
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function dealNewHand() {
+      tableEl.innerHTML = "";
+      selectedIds = [];
+      msgEl.textContent = "";
+      // 从整副牌里随机抽 20 张
+      const deck = shuffle(createDeck());
+      cards = deck.slice(0, 20);
+      cards.forEach(card => {
+        const item = document.createElement("div");
+        item.className = "gd-card-item";
+        item.dataset.id = card.id;
+        item.dataset.rank = card.rank;
+
+        const inner = document.createElement("div");
+        inner.className = "gd-card-inner " + (card.color === "red" ? "red" : "black");
+
+        const top = document.createElement("div");
+        top.className = "gd-rank-top";
+        top.textContent = card.rank;
+
+        const center = document.createElement("div");
+        center.className = "gd-suit-center";
+        center.textContent = card.suit;
+
+        const bottom = document.createElement("div");
+        bottom.className = "gd-rank-bottom";
+        bottom.textContent = card.rank;
+
+        inner.appendChild(top);
+        inner.appendChild(center);
+        inner.appendChild(bottom);
+        item.appendChild(inner);
+        item.addEventListener("click", () => onCardClick(card.id));
+        tableEl.appendChild(item);
+      });
+    }
+
+    function onCardClick(cardId) {
+      if (!running) return;
+      const card = cards.find(c => c.id === cardId);
+      if (!card || card.removed) return;
+      const idx = selectedIds.indexOf(cardId);
+      if (idx !== -1) {
+        selectedIds.splice(idx, 1);
+      } else {
+        selectedIds.push(cardId);
+      }
+      refreshSelectedUI();
+      // 每次选择变化后，检查是否凑够对子/炸弹
+      if (selectedIds.length >= 2) {
+        checkSelection();
+      }
+    }
+
+    function refreshSelectedUI() {
+      const allItems = tableEl.querySelectorAll(".gd-card-item");
+      allItems.forEach(el => {
+        if (selectedIds.includes(el.dataset.id)) {
+          el.classList.add("selected");
+        } else {
+          el.classList.remove("selected");
+        }
+      });
+    }
+
+    function checkSelection() {
+      const selectedCards = cards.filter(c => selectedIds.includes(c.id) && !c.removed);
+      if (selectedCards.length < 2) return;
+      const ranks = Array.from(new Set(selectedCards.map(c => c.rank)));
+      if (ranks.length !== 1) {
+        // 不同点数，不算
+        msgEl.textContent = "必须是同点数才能算对子/炸弹哦～";
+        return;
+      }
+      const count = selectedCards.length;
+      if (count === 2 || count === 4) {
+        // 2张对子，4张炸弹
+        let gain = 0;
+        if (count === 2) {
+          gain = 2;
+          msgEl.textContent = "很好！出了一手对子 +" + gain + " 分";
+        } else if (count === 4) {
+          gain = 8;
+          msgEl.textContent = "炸弹！掼蛋最爱的牌型 +" + gain + " 分！";
+        }
+        score += gain;
+        scoreEl.textContent = score;
+        // 移除这几张牌
+        selectedCards.forEach(c => {
+          c.removed = true;
+          const el = tableEl.querySelector('.gd-card-item[data-id="' + c.id + '"]');
+          if (el) {
+            el.classList.add("removed");
+          }
+        });
+        selectedIds = [];
+        refreshSelectedUI();
+        // 如果牌都快没得选了，可以自动再发一手
+        const left = cards.filter(c => !c.removed).length;
+        if (left <= 4) {
+          setTimeout(() => {
+            if (running) {
+              msgEl.textContent = "重新发一手牌，继续练！";
+              dealNewHand();
+            }
+          }, 400);
+        }
+      } else if (count > 4) {
+        msgEl.textContent = "同点数最多选 4 张，4 张就是炸弹啦～";
+      } else {
+        msgEl.textContent = "同点数至少要 2 张才算对子～";
+      }
+    }
+
+    function startGame() {
+      if (running) return;
+      running = true;
+      timeLeft = 30;
+      score = 0;
+      timeEl.textContent = timeLeft;
+      scoreEl.textContent = score;
+      resultEl.textContent = "";
+      msgEl.textContent = "";
+      selectedIds = [];
+      startBtn.disabled = true;
+      startBtn.textContent = "训练中…";
+      dealNewHand();
+      if (timerId) clearInterval(timerId);
+      timerId = setInterval(() => {
+        timeLeft--;
+        timeEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function endGame() {
+      running = false;
+      if (timerId) {
+        clearInterval(timerId);
+        timerId = null;
+      }
+      startBtn.disabled = false;
+      startBtn.textContent = "再练一局";
+      let comment = "";
+      if (score >= 40) {
+        comment = "掼蛋眼神王！实战打牌肯定对子、炸弹一眼扫光～";
+      } else if (score >= 24) {
+        comment = "不错不错，已经很有\"掼友\"风采了～";
+      } else if (score >= 10) {
+        comment = "节奏起来了，再练几局就能甩队友一条街～";
+      } else {
+        comment = "刚热身，继续练，你的掼蛋基本功会越来越稳！";
+      }
+      resultEl.innerHTML =
+        `本局得分 <strong>${score}</strong> 分（对子 2 分 / 炸弹 8 分）<br>${comment}`;
+    }
+
+    startBtn.addEventListener("click", startGame);
+  })();
 </script>
 
 </body>
