@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>游戏合集 - 准点下班大作战 & 掼蛋基础功 & 疯狂抢红包 & 甜品翻翻乐</title>
+  <title>游戏合集 - 准点下班大作战 & 掼蛋基础功 & 疯狂抢红包 & 甜品翻翻乐 & 圣诞消消乐</title>
   <style>
     body {
       margin: 0;
@@ -669,6 +669,159 @@
       .sweet-back {
         font-size: 16px;
       }
+    }
+
+    /* 圣诞消消乐游戏样式 */
+    #xmas-game-timer {
+      font-size:14px;
+      font-weight:600;
+      color:#92400e;
+    }
+
+    #xmas-game-restart {
+      font-size:12px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:linear-gradient(135deg,#e5e7eb,#f9fafb);
+      border:1px solid rgba(148,163,184,.8);
+      color:#374151;
+      cursor:pointer;
+      box-shadow:0 4px 8px rgba(148,163,184,.4);
+    }
+
+    #xmas-game-restart:disabled {
+      opacity:.6;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+
+    #xmas-leaderboard {
+      margin-top:10px;
+      width:100%;
+      max-width:360px;
+    }
+
+    #xmas-game-card h2 {
+      font-size:18px;
+      margin-bottom:6px;
+      color:#b91c1c;
+    }
+
+    #xmas-game {
+      margin-top:4px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      position:relative;
+    }
+
+    #xmas-leaderboard table {
+      font-size: 13px;
+    }
+
+    #xmas-leaderboard th,
+    #xmas-leaderboard td {
+      padding: 6px 8px;
+    }
+
+    #xmas-leaderboard tr.lb-top10 {
+      background: linear-gradient(135deg,#fef9c3,#fee2e2);
+      font-weight: 700;
+    }
+
+    .coin-bonus-fx {
+      position:absolute;
+      top:4px;
+      right:8px;
+      font-size:20px;
+      font-weight:900;
+      color:#b45309;
+      text-shadow:0 0 6px rgba(250,204,21,.9);
+      animation: coinPop 0.8s ease-out forwards;
+    }
+
+    @keyframes coinPop{
+      0%{ transform:translateY(0) scale(0.8); opacity:0; }
+      40%{ transform:translateY(-8px) scale(1.15); opacity:1; }
+      100%{ transform:translateY(-20px) scale(1); opacity:0; }
+    }
+
+    #xmas-game-score {
+      font-size:16px;
+      font-weight:700;
+      color:#e11d48;
+    }
+
+    #xmas-game-board {
+      width: 320px;
+      height: 320px;
+      display:grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap:6px;
+      padding:8px;
+      border-radius:20px;
+      background:
+        radial-gradient(circle at top, rgba(254,249,195,.8), transparent 70%),
+        radial-gradient(circle at bottom, rgba(254,226,226,.8), transparent 70%),
+        #fefce8;
+      box-shadow:0 10px 20px rgba(248,181,82,.45) inset;
+    }
+
+    .xmas-cell {
+      width: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 10px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffffee;
+      cursor: pointer;
+      user-select: none;
+      box-sizing: border-box;
+      border: 2px solid transparent;
+      box-shadow: 0 4px 8px rgba(148, 163, 184, 0.5);
+      transition:
+        transform 0.2s ease,
+        border 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .xmas-cell:hover {
+      transform: translateY(-1px);
+      box-shadow:0 6px 12px rgba(148,163,184,.7);
+    }
+
+    .xmas-cell.selected {
+      border: 2px solid transparent;
+      border-image: linear-gradient(45deg, gold, #ff6, gold, #ff6) 1;
+      transform: scale(1.08) rotate(-2deg);
+      background: radial-gradient(circle at center, #fff7d6, #fef3c7);
+      box-shadow:
+        0 0 10px 2px rgba(255, 215, 0, 0.5),
+        0 0 20px 6px rgba(250, 204, 21, 0.3),
+        inset 0 0 4px rgba(255, 255, 255, 0.8);
+      z-index: 1;
+      animation: floaty 1.2s ease-in-out infinite;
+    }
+
+    @media (max-width:480px){
+      #xmas-game-board{
+        width:280px;
+        height:280px;
+      }
+      .xmas-cell{
+        font-size:22px;
+      }
+    }
+
+    @keyframes floaty {
+      0%   { transform: scale(1.08) rotate(-2deg) translateY(0); }
+      50%  { transform: scale(1.08) rotate(-2deg) translateY(-4px); }
+      100% { transform: scale(1.08) rotate(-2deg) translateY(0); }
     }
   </style>
 </head>
@@ -1502,6 +1655,521 @@
     // 初始化
     createBoard();
   })();
+</script>
+
+<!-- 圣诞消消乐游戏 -->
+<div class="sweet-game-wrapper" style="max-width: 520px; margin: 40px auto 0; padding: 16px 12px 32px;">
+  <div class="sweet-card" id="xmas-game-card">
+    <h2>🎮 圣诞消消乐 · 小游戏区</h2>
+    <!-- 规则说明 -->
+    <div class="sweet-subtitle" style="font-size:13px; line-height:1.5; margin-top:4px; text-align:left;">
+      规则：在 1 分钟内 点击两格交换，连成 3 个相同图案 即可消除得分。<br>
+      时间到会锁定分数，可选择记录到本页 TOP 20 全网排行榜～
+    </div>
+    <!-- 新增金币 + 计分说明（小字） -->
+    <div class="sweet-subtitle" style="font-size:12px; line-height:1.5; margin:6px 0 8px; text-align:left;">
+      ✨ 新增金币 🟡 大加分<br>
+      游戏进行 30 秒后，会从上方随机掉落 金币 🟡<br>
+      金币参与三消可获得 100 分超级奖励<br>
+      ✨ 计分方式<br>
+      3 个连在一起：+10 分<br>
+      4 个或更多 / L 型 / T 型：+20 分<br>
+      含金币组：直接 +100 分
+    </div>
+    <!-- 实际游戏区域 -->
+    <div id="xmas-game">
+      <div id="xmas-game-score">分数：0</div>
+      <div id="xmas-game-timer">剩余时间：60 秒</div>
+      <button id="xmas-game-restart" disabled>再玩一局</button>
+      <div id="xmas-game-board"></div>
+      <div style="margin-top:12px; width:100%; max-width:360px;">
+        <h3 style="font-size:14px; margin:0 0 4px; color:#b91c1c;">
+          🏆 全网 TOP 20 榜单（前 10 名有奖）
+        </h3>
+        <div id="xmas-leaderboard"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+(function(){
+  const boardDiv       = document.getElementById("xmas-game-board");
+  const scoreDiv       = document.getElementById("xmas-game-score");
+  const timerDiv       = document.getElementById("xmas-game-timer");
+  const restartBtn     = document.getElementById("xmas-game-restart");
+  const leaderboardDiv = document.getElementById("xmas-leaderboard");
+  const gameWrapper    = document.getElementById("xmas-game");
+
+  if (!boardDiv || !scoreDiv || !timerDiv || !leaderboardDiv || !gameWrapper) return;
+
+  // 🔗 这里用你自己的 Apps Script Web App URL（保持你现在的那条）
+  const LEADERBOARD_ENDPOINT = "https://script.google.com/macros/s/AKfycbxegT5Fx3PmB_9EAqG8CBpKculqNv4scbLuC0rKKIgn3WFCDFqUO6iVAJL-aHG_-CM_PA/exec";
+
+  const BASE_ICONS   = ["🎄","🎅","❄️","🎁","🦌","⛄"];
+  const COIN_ICON    = "🟡";
+  const size         = 8;
+  const GAME_SECONDS = 60;
+
+  let board = [];
+  let selected = null;
+  let score = 0;
+  let timeLeft = GAME_SECONDS;
+  let timerId = null;
+  let gameOver = false;
+  let hasStarted = false;
+
+  /* ========== 排行榜接口：后端返回 top20，前端高亮前 10 ========== */
+  async function fetchLeaderboard() {
+    try {
+      const res = await fetch(LEADERBOARD_ENDPOINT + "?action=list", {
+        method: "GET",
+        cache: "no-store"
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      const list = data.top20 || data.top10 || data.list || [];
+      return Array.isArray(list) ? list : [];
+    } catch (e) {
+      console.warn("加载排行榜失败：", e);
+      return [];
+    }
+  }
+
+  async function postScore(name, score) {
+    try {
+      const body = new URLSearchParams({
+        action: "add",
+        name: name,
+        score: String(score)
+      });
+      await fetch(LEADERBOARD_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+        },
+        body
+      });
+    } catch (e) {
+      console.warn("提交排行榜失败：", e);
+    }
+  }
+
+  async function renderLeaderboard() {
+    const list = await fetchLeaderboard();
+    if (!list.length) {
+      leaderboardDiv.innerHTML =
+        '<p class="sweet-subtitle" style="margin-top:6px;">当前还没有记录～赶紧来当第一个上榜的小可爱吧 🏆</p>';
+      return;
+    }
+
+    let html = '<table style="width:100%; border-collapse:collapse; margin-top:10px; border-radius:18px; overflow:hidden; border:1px solid rgba(248,200,200,.9); background:#ffffff;"><thead><tr><th style="background:linear-gradient(145deg, #fee2e2, #fef9c3); color:#7f1d1d; font-weight:900; padding:6px 8px; text-align:left;">名次</th><th style="background:linear-gradient(145deg, #fee2e2, #fef9c3); color:#7f1d1d; font-weight:900; padding:6px 8px; text-align:left;">微信名</th><th style="background:linear-gradient(145deg, #fee2e2, #fef9c3); color:#7f1d1d; font-weight:900; padding:6px 8px; text-align:left;">得分</th><th style="background:linear-gradient(145deg, #fee2e2, #fef9c3); color:#7f1d1d; font-weight:900; padding:6px 8px; text-align:left;"></th></tr></thead><tbody>';
+
+    list.forEach((item, idx) => {
+      const rank = idx + 1;
+      const crown =
+        rank === 1 ? "👑 " :
+        rank === 2 ? "🥈 " :
+        rank === 3 ? "🥉 " : "";
+      const isPrize = rank <= 10;
+      const prizeBadge = isPrize
+        ? '<span style="font-size:11px; margin-left:4px; color:#b45309;">⭐ 获奖区</span>'
+        : '';
+      html += `<tr class="${isPrize ? 'lb-top10' : ''}" style="${isPrize ? 'background: linear-gradient(135deg,#fef9c3,#fee2e2); font-weight: 700;' : ''}">
+        <td style="padding:6px 8px; text-align:left; border-bottom:1px solid rgba(248,200,200,.7);">${rank}</td>
+        <td style="padding:6px 8px; text-align:left; border-bottom:1px solid rgba(248,200,200,.7);">${crown}${(item.name || "匿名")}</td>
+        <td style="padding:6px 8px; text-align:left; border-bottom:1px solid rgba(248,200,200,.7);">${item.score}</td>
+        <td style="padding:6px 8px; text-align:left; border-bottom:1px solid rgba(248,200,200,.7);">${prizeBadge}</td>
+      </tr>`;
+    });
+
+    html += "</tbody></table>";
+    leaderboardDiv.innerHTML = html;
+  }
+
+  async function tryRecordScore(finalScore) {
+    if (finalScore <= 0) {
+      alert("这局分数还比较低，下次多消几个再来上榜也可以～");
+      return;
+    }
+    const want = confirm(
+      `时间到！本轮得分：${finalScore} 分。\n\n是否记录到本页 TOP 20 全网排行榜（前 10 名有奖）？`
+    );
+    if (!want) return;
+    const name = prompt("请输入要显示在排行榜上的微信名：", "");
+    if (name === null) return;
+    const trimmed = (name || "").trim();
+    if (!trimmed) {
+      alert("没有输入名字，这次就先不记录啦～");
+      return;
+    }
+    await postScore(trimmed, finalScore);
+    await renderLeaderboard();
+  }
+
+  /* ========== 基础工具函数 ========== */
+  function randomIcon() {
+    const elapsed = hasStarted ? (GAME_SECONDS - timeLeft) : 0;
+    if (hasStarted && elapsed >= 30) {
+      if (Math.random() < 0.2) {
+        return COIN_ICON;
+      }
+    }
+    return BASE_ICONS[Math.floor(Math.random() * BASE_ICONS.length)];
+  }
+
+  function swap(r1, c1, r2, c2) {
+    const tmp = board[r1][c1];
+    board[r1][c1] = board[r2][c2];
+    board[r2][c2] = tmp;
+  }
+
+  function hasAnyMatchOnBoard() {
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size - 2; c++) {
+        const v = board[r][c];
+        if (v && v === board[r][c+1] && v === board[r][c+2]) return true;
+      }
+    }
+    for (let c = 0; c < size; c++) {
+      for (let r = 0; r < size - 2; r++) {
+        const v = board[r][c];
+        if (v && v === board[r+1][c] && v === board[r+2][c]) return true;
+      }
+    }
+    return false;
+  }
+
+  function hasAnyPossibleMove() {
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (c + 1 < size) {
+          if (board[r][c] !== board[r][c+1]) {
+            swap(r, c, r, c+1);
+            const ok = hasAnyMatchOnBoard();
+            swap(r, c, r, c+1);
+            if (ok) return true;
+          }
+        }
+        if (r + 1 < size) {
+          if (board[r][c] !== board[r+1][c]) {
+            swap(r, c, r+1, c);
+            const ok = hasAnyMatchOnBoard();
+            swap(r, c, r+1, c);
+            if (ok) return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  function reshuffleBoard() {
+    const pool = [];
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        pool.push(board[r][c] || randomIcon());
+      }
+    }
+    let attempts = 0;
+    while (attempts < 50) {
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = pool[i];
+        pool[i] = pool[j];
+        pool[j] = tmp;
+      }
+      let k = 0;
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          board[r][c] = pool[k++];
+        }
+      }
+      if (hasAnyPossibleMove()) return;
+      attempts++;
+    }
+    while (true) {
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          board[r][c] = randomIcon();
+        }
+      }
+      if (hasAnyPossibleMove()) return;
+    }
+  }
+
+  /* ========== 计分显示、倒计时、结束逻辑 ========== */
+  function updateScoreText() {
+    scoreDiv.textContent = "分数：" + score;
+  }
+
+  function updateTimerText() {
+    timerDiv.textContent = "剩余时间：" + timeLeft + " 秒";
+  }
+
+  function startTimerIfNeeded() {
+    if (hasStarted || gameOver) return;
+    hasStarted = true;
+    restartBtn.disabled = true;
+    timerId = setInterval(() => {
+      timeLeft--;
+      if (timeLeft <= 0) {
+        timeLeft = 0;
+        updateTimerText();
+        endGame();
+      } else {
+        updateTimerText();
+      }
+    }, 1000);
+  }
+
+  function endGame() {
+    if (gameOver) return;
+    gameOver = true;
+    clearInterval(timerId);
+    timerId = null;
+    updateTimerText();
+    restartBtn.disabled = false;
+    alert("时间到！本局最终得分：" + score + " 分。");
+    tryRecordScore(score);
+  }
+
+  /* ========== 金币特效 ========== */
+  function showCoinEffect() {
+    const fx = document.createElement("div");
+    fx.className = "coin-bonus-fx";
+    fx.textContent = "🟡 +100！";
+    fx.style.fontSize = "42px";
+    gameWrapper.appendChild(fx);
+    setTimeout(() => {
+      fx.remove();
+    }, 2000);
+  }
+
+  /* ========== 游戏核心：初始化 / 渲染 / 三消逻辑（含 3/4/5 + 金币） ========== */
+  function initBoard() {
+    while (true) {
+      board = [];
+      for (let r = 0; r < size; r++) {
+        const row = [];
+        for (let c = 0; c < size; c++) {
+          row.push(BASE_ICONS[Math.floor(Math.random() * BASE_ICONS.length)]);
+        }
+        board.push(row);
+      }
+      if (hasAnyPossibleMove()) break;
+    }
+    selected = null;
+    score = 0;
+    gameOver = false;
+    hasStarted = false;
+    timeLeft = GAME_SECONDS;
+    clearInterval(timerId);
+    timerId = null;
+    updateTimerText();
+    updateScoreText();
+    restartBtn.disabled = true;
+    render();
+  }
+
+  function render() {
+    boardDiv.innerHTML = "";
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        const cell = document.createElement("div");
+        cell.className = "xmas-cell";
+        cell.textContent = board[r][c] || "";
+        if (selected && selected.r === r && selected.c === c) {
+          cell.classList.add("selected");
+        }
+        cell.onclick = () => select(r, c);
+        boardDiv.appendChild(cell);
+      }
+    }
+  }
+
+  function select(r, c) {
+    if (gameOver) return;
+    startTimerIfNeeded();
+    if (!selected) {
+      selected = { r, c };
+      render();
+      return;
+    }
+    const sr = selected.r;
+    const sc = selected.c;
+    const distance = Math.abs(sr - r) + Math.abs(sc - c);
+    if (sr === r && sc === c) {
+      selected = null;
+      render();
+      return;
+    }
+    if (distance === 1) {
+      swap(sr, sc, r, c);
+      if (!checkMatchesAndMark()) {
+        swap(sr, sc, r, c);
+      } else {
+        startCascadeAnimation();
+      }
+    }
+    selected = null;
+    render();
+  }
+
+  function checkMatchesAndMark() {
+    const mark = Array.from({ length: size }, () =>
+      Array(size).fill(false)
+    );
+    for (let r = 0; r < size; r++) {
+      let c = 0;
+      while (c < size) {
+        const v = board[r][c];
+        if (!v) { c++; continue; }
+        let c2 = c + 1;
+        while (c2 < size && board[r][c2] === v) c2++;
+        const len = c2 - c;
+        if (len >= 3) {
+          for (let k = c; k < c2; k++) {
+            mark[r][k] = true;
+          }
+        }
+        c = c2;
+      }
+    }
+    for (let c = 0; c < size; c++) {
+      let r = 0;
+      while (r < size) {
+        const v = board[r][c];
+        if (!v) { r++; continue; }
+        let r2 = r + 1;
+        while (r2 < size && board[r2][c] === v) r2++;
+        const len = r2 - r;
+        if (len >= 3) {
+          for (let k = r; k < r2; k++) {
+            mark[k][c] = true;
+          }
+        }
+        r = r2;
+      }
+    }
+    let anyMarked = false;
+    for (let r = 0; r < size && !anyMarked; r++) {
+      for (let c = 0; c < size && !anyMarked; c++) {
+        if (mark[r][c]) anyMarked = true;
+      }
+    }
+    if (!anyMarked) return false;
+    const visited = Array.from({ length: size }, () =>
+      Array(size).fill(false)
+    );
+    let totalGained = 0;
+    let gotCoinBonus = false;
+    const dr = [1,-1,0,0];
+    const dc = [0,0,1,-1];
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (!mark[r][c] || visited[r][c]) continue;
+        const queue = [[r,c]];
+        visited[r][c] = true;
+        const cells = [];
+        let groupSize = 0;
+        let hasCoin = false;
+        while (queue.length) {
+          const [rr, cc] = queue.shift();
+          cells.push([rr, cc]);
+          groupSize++;
+          if (board[rr][cc] === COIN_ICON) hasCoin = true;
+          for (let k = 0; k < 4; k++) {
+            const nr = rr + dr[k];
+            const nc = cc + dc[k];
+            if (
+              nr >= 0 && nr < size &&
+              nc >= 0 && nc < size &&
+              mark[nr][nc] && !visited[nr][nc]
+            ) {
+              visited[nr][nc] = true;
+              queue.push([nr, nc]);
+            }
+          }
+        }
+        let points = 0;
+        if (hasCoin) {
+          points = 100;
+          gotCoinBonus = true;
+        } else if (groupSize >= 4) {
+          points = 20;
+        } else {
+          points = 10;
+        }
+        totalGained += points;
+        for (const [rr, cc] of cells) {
+          board[rr][cc] = null;
+        }
+      }
+    }
+    if (totalGained > 0) {
+      score += totalGained;
+      updateScoreText();
+      if (gotCoinBonus) {
+        showCoinEffect();
+      }
+      return true;
+    }
+    return false;
+  }
+
+  function applyGravityOnce() {
+    for (let c = 0; c < size; c++) {
+      let pointer = size - 1;
+      for (let r = size - 1; r >= 0; r--) {
+        if (board[r][c]) {
+          board[pointer][c] = board[r][c];
+          pointer--;
+        }
+      }
+      while (pointer >= 0) {
+        board[pointer][c] = randomIcon();
+        pointer--;
+      }
+    }
+  }
+
+  function startCascadeAnimation() {
+    render();
+    setTimeout(() => {
+      cascadeStep();
+    }, 220);
+  }
+
+  function cascadeStep() {
+    if (gameOver) return;
+    applyGravityOnce();
+    render();
+    setTimeout(() => {
+      if (checkMatchesAndMark()) {
+        render();
+        setTimeout(() => {
+          cascadeStep();
+        }, 220);
+      } else {
+        if (!hasAnyPossibleMove() && !gameOver) {
+          reshuffleBoard();
+          render();
+        }
+      }
+    }, 220);
+  }
+
+  /* ========== 再玩一局按钮 ========== */
+  restartBtn.addEventListener("click", () => {
+    initBoard();
+  });
+
+  // 初始化游戏和排行榜
+  initBoard();
+  renderLeaderboard();
+})();
 </script>
 
 </body>
