@@ -823,6 +823,71 @@
       50%  { transform: scale(1.08) rotate(-2deg) translateY(-4px); }
       100% { transform: scale(1.08) rotate(-2deg) translateY(0); }
     }
+
+    /* 角色选择样式 */
+    #xmas-character-select {
+      margin: 12px 0;
+      padding: 12px;
+      background: linear-gradient(145deg, #fff7ed, #ffe3d1);
+      border-radius: 16px;
+      border: 2px solid rgba(248,200,200,.8);
+    }
+
+    #xmas-character-select h3 {
+      font-size: 15px;
+      margin: 0 0 10px;
+      color: #b91c1c;
+      text-align: center;
+    }
+
+    .xmas-characters {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .xmas-char-btn {
+      padding: 10px;
+      border: 2px solid rgba(148,163,184,.6);
+      border-radius: 12px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .xmas-char-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(248,113,113,.4);
+      border-color: #fb7185;
+    }
+
+    .xmas-char-btn.selected {
+      background: linear-gradient(135deg, #fee2e2, #fef3c7);
+      border-color: #fb7185;
+      box-shadow: 0 0 0 2px rgba(248,113,113,.3);
+      font-weight: 700;
+    }
+
+    .xmas-char-btn .char-emoji {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .xmas-char-btn .char-name {
+      font-weight: 600;
+      color: #7f1d1d;
+      margin-bottom: 2px;
+    }
+
+    .xmas-char-btn .char-bonus {
+      font-size: 11px;
+      color: #92400e;
+    }
   </style>
 </head>
 <body>
@@ -1676,6 +1741,32 @@
       4 个或更多 / L 型 / T 型：+20 分<br>
       含金币组：直接 +100 分
     </div>
+    <!-- 角色选择区域 -->
+    <div id="xmas-character-select">
+      <h3>🎭 选择你的角色</h3>
+      <div class="xmas-characters">
+        <div class="xmas-char-btn" data-char="santa">
+          <span class="char-emoji">🎅</span>
+          <div class="char-name">圣诞老人</div>
+          <div class="char-bonus">金币出现概率 +10%</div>
+        </div>
+        <div class="xmas-char-btn" data-char="tree">
+          <span class="char-emoji">🎄</span>
+          <div class="char-name">圣诞树</div>
+          <div class="char-bonus">三消加 +5 分</div>
+        </div>
+        <div class="xmas-char-btn" data-char="snowman">
+          <span class="char-emoji">⛄</span>
+          <div class="char-name">雪人</div>
+          <div class="char-bonus">每局开始额外 +5 秒</div>
+        </div>
+        <div class="xmas-char-btn" data-char="reindeer">
+          <span class="char-emoji">🦌</span>
+          <div class="char-name">小鹿</div>
+          <div class="char-bonus">4 连加分从 +20 变 +25</div>
+        </div>
+      </div>
+    </div>
     <!-- 实际游戏区域 -->
     <div id="xmas-game">
       <div id="xmas-game-score">分数：0</div>
@@ -1710,7 +1801,7 @@
   const BASE_ICONS   = ["🎄","🎅","❄️","🎁","🦌","⛄"];
   const COIN_ICON    = "🟡";
   const size         = 8;
-  const GAME_SECONDS = 60;
+  let GAME_SECONDS = 60; // 改为 let，因为雪人角色会修改它
 
   let board = [];
   let selected = null;
@@ -1719,6 +1810,29 @@
   let timerId = null;
   let gameOver = false;
   let hasStarted = false;
+  let selectedCharacter = null; // 选中的角色
+
+  /* ========== 角色选择功能 ========== */
+  const charSelectDiv = document.getElementById("xmas-character-select");
+  if (charSelectDiv) {
+    const charButtons = charSelectDiv.querySelectorAll(".xmas-char-btn");
+
+    charButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        // 移除其他按钮的选中状态
+        charButtons.forEach(b => b.classList.remove("selected"));
+        // 添加当前按钮的选中状态
+        btn.classList.add("selected");
+        selectedCharacter = btn.dataset.char;
+      });
+    });
+
+    // 默认选择第一个角色
+    if (charButtons.length > 0) {
+      charButtons[0].classList.add("selected");
+      selectedCharacter = charButtons[0].dataset.char;
+    }
+  }
 
   /* ========== 排行榜接口：后端返回 top20，前端高亮前 10 ========== */
   async function fetchLeaderboard() {
@@ -1812,7 +1926,9 @@
   function randomIcon() {
     const elapsed = hasStarted ? (GAME_SECONDS - timeLeft) : 0;
     if (hasStarted && elapsed >= 30) {
-      if (Math.random() < 0.2) {
+      // 圣诞老人角色：金币出现概率从 20% 增加到 30%
+      const coinProbability = selectedCharacter === "santa" ? 0.3 : 0.2;
+      if (Math.random() < coinProbability) {
         return COIN_ICON;
       }
     }
@@ -1949,6 +2065,10 @@
 
   /* ========== 游戏核心：初始化 / 渲染 / 三消逻辑（含 3/4/5 + 金币） ========== */
   function initBoard() {
+    // 雪人角色：每局开始额外 +5 秒
+    const baseTime = 60;
+    GAME_SECONDS = selectedCharacter === "snowman" ? baseTime + 5 : baseTime;
+    
     while (true) {
       board = [];
       for (let r = 0; r < size; r++) {
@@ -2098,9 +2218,14 @@
           points = 100;
           gotCoinBonus = true;
         } else if (groupSize >= 4) {
-          points = 20;
+          // 小鹿角色：4 连加分从 +20 变 +25
+          points = selectedCharacter === "reindeer" ? 25 : 20;
         } else {
           points = 10;
+        }
+        // 圣诞树角色：三消加 +5 分
+        if (selectedCharacter === "tree") {
+          points += 5;
         }
         totalGained += points;
         for (const [rr, cc] of cells) {
