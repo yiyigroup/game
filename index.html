@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>游戏合集 - 准点下班大作战 & 掼蛋基础功 & 疯狂抢红包 & 甜品翻翻乐 & 圣诞消消乐</title>
+  <title>游戏合集 - 准点下班大作战 & 掼蛋基础功 & 疯狂抢红包 & 甜品翻翻乐 & 圣诞消消乐 & 冰箱塞满挑战</title>
   <style>
     body {
       margin: 0;
@@ -847,6 +847,12 @@
       margin-top: 8px;
     }
 
+    @media (min-width: 480px) {
+      .xmas-characters {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
     .xmas-char-btn {
       padding: 10px;
       border: 2px solid rgba(148,163,184,.6);
@@ -887,6 +893,169 @@
     .xmas-char-btn .char-bonus {
       font-size: 11px;
       color: #92400e;
+    }
+
+    /* 冰箱塞满挑战游戏样式 */
+    .fridge-game-wrapper {
+      max-width: 520px;
+      margin: 40px auto 0;
+      padding: 16px 12px 32px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC",
+                   "Microsoft YaHei", sans-serif;
+      color: #374151;
+      text-align: center;
+    }
+
+    .fridge-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #1e40af;
+    }
+
+    .fridge-subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+
+    .fridge-card {
+      background: linear-gradient(145deg, #e0f2fe, #dbeafe);
+      border-radius: 18px;
+      box-shadow: 0 12px 26px rgba(59, 130, 246, 0.2);
+      padding: 14px 12px 18px;
+    }
+
+    .fridge-info-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #1e40af;
+    }
+
+    .fridge-info-bar span strong {
+      font-size: 16px;
+      margin-left: 3px;
+    }
+
+    .fridge-container {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .fridge-board {
+      width: 200px;
+      height: 320px;
+      background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+      border: 3px solid #3b82f6;
+      border-radius: 12px;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(16, 1fr);
+      gap: 1px;
+      padding: 2px;
+      box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .fridge-cell {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 2px;
+      border: 1px solid rgba(147, 197, 253, 0.3);
+    }
+
+    .fridge-cell.filled {
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      box-shadow: inset 0 0 4px rgba(251, 191, 36, 0.5);
+    }
+
+    .fridge-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .fridge-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .fridge-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+    }
+
+    .fridge-btn:active {
+      transform: translateY(0);
+    }
+
+    .fridge-btn-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .fridge-next {
+      width: 80px;
+      height: 80px;
+      background: #fef3c7;
+      border: 2px solid #fbbf24;
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 1px;
+      padding: 2px;
+    }
+
+    .fridge-next-cell {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 1px;
+    }
+
+    .fridge-next-cell.filled {
+      background: #fbbf24;
+    }
+
+    .fridge-result {
+      font-size: 14px;
+      color: #374151;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .fridge-result strong {
+      font-size: 16px;
+      color: #1e40af;
+    }
+
+    .fridge-tip {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 480px) {
+      .fridge-board {
+        width: 180px;
+        height: 288px;
+      }
+      .fridge-container {
+        flex-direction: column;
+        align-items: center;
+      }
     }
   </style>
 </head>
@@ -985,7 +1154,7 @@
   function updateDot() {
     // 把 pos(0~100) 转换为条上的 left 百分比
     if (dotEl) {
-      dotEl.style.left = pos + "%";
+    dotEl.style.left = pos + "%";
     }
   }
 
@@ -1743,8 +1912,13 @@
     </div>
     <!-- 角色选择区域 -->
     <div id="xmas-character-select">
-      <h3>🎭 选择你的角色</h3>
+      <h3>🎭 选择你的英雄</h3>
       <div class="xmas-characters">
+        <div class="xmas-char-btn" data-char="original">
+          <span class="char-emoji">🎮</span>
+          <div class="char-name">原始版本</div>
+          <div class="char-bonus">经典玩法，无特殊加成</div>
+        </div>
         <div class="xmas-char-btn" data-char="santa">
           <span class="char-emoji">🎅</span>
           <div class="char-name">圣诞老人</div>
@@ -1752,17 +1926,17 @@
         </div>
         <div class="xmas-char-btn" data-char="tree">
           <span class="char-emoji">🎄</span>
-          <div class="char-name">圣诞树</div>
+          <div class="char-name">圣诞树怪</div>
           <div class="char-bonus">三消加 +5 分</div>
         </div>
         <div class="xmas-char-btn" data-char="snowman">
           <span class="char-emoji">⛄</span>
-          <div class="char-name">雪人</div>
+          <div class="char-name">圣诞雪人</div>
           <div class="char-bonus">每局开始额外 +5 秒</div>
         </div>
         <div class="xmas-char-btn" data-char="reindeer">
           <span class="char-emoji">🦌</span>
-          <div class="char-name">小鹿</div>
+          <div class="char-name">圣诞鹿鹿</div>
           <div class="char-bonus">4 连加分从 +20 变 +25</div>
         </div>
       </div>
@@ -1800,6 +1974,7 @@
 
   const BASE_ICONS   = ["🎄","🎅","❄️","🎁","🦌","⛄"];
   const COIN_ICON    = "🟡";
+  const RED_POCKET_ICON = "🧧";
   const size         = 8;
   let GAME_SECONDS = 60; // 改为 let，因为雪人角色会修改它
 
@@ -1827,7 +2002,7 @@
         // 如果游戏还没开始，更新显示的初始时间
         if (!hasStarted && !gameOver) {
           const baseTime = 60;
-          GAME_SECONDS = selectedCharacter === "snowman" ? baseTime + 5 : baseTime;
+          GAME_SECONDS = (selectedCharacter === "snowman" && selectedCharacter !== "original") ? baseTime + 5 : baseTime;
           timeLeft = GAME_SECONDS;
           updateTimerText();
         }
@@ -1840,7 +2015,7 @@
       selectedCharacter = charButtons[0].dataset.char;
       // 初始化时也设置正确的时间
       const baseTime = 60;
-      GAME_SECONDS = selectedCharacter === "snowman" ? baseTime + 5 : baseTime;
+      GAME_SECONDS = (selectedCharacter === "snowman" && selectedCharacter !== "original") ? baseTime + 5 : baseTime;
       timeLeft = GAME_SECONDS;
       updateTimerText();
     }
@@ -1938,8 +2113,8 @@
   function randomIcon() {
     const elapsed = hasStarted ? (GAME_SECONDS - timeLeft) : 0;
     if (hasStarted && elapsed >= 30) {
-      // 圣诞老人角色：金币出现概率从 20% 增加到 30%
-      const coinProbability = selectedCharacter === "santa" ? 0.3 : 0.2;
+      // 圣诞老人角色：金币出现概率从 20% 增加到 30%（原始版本不适用）
+      const coinProbability = (selectedCharacter === "santa" && selectedCharacter !== "original") ? 0.3 : 0.2;
       if (Math.random() < coinProbability) {
         return COIN_ICON;
       }
@@ -2077,9 +2252,9 @@
 
   /* ========== 游戏核心：初始化 / 渲染 / 三消逻辑（含 3/4/5 + 金币） ========== */
   function initBoard() {
-    // 雪人角色：每局开始额外 +5 秒
+    // 雪人角色：每局开始额外 +5 秒（原始版本不适用）
     const baseTime = 60;
-    GAME_SECONDS = selectedCharacter === "snowman" ? baseTime + 5 : baseTime;
+    GAME_SECONDS = (selectedCharacter === "snowman" && selectedCharacter !== "original") ? baseTime + 5 : baseTime;
     
     while (true) {
       board = [];
@@ -2124,6 +2299,13 @@
   function select(r, c) {
     if (gameOver) return;
     startTimerIfNeeded();
+    
+    // 检查是否点击了红包
+    if (board[r][c] === RED_POCKET_ICON) {
+      handleRedPocketClick(r, c);
+      return;
+    }
+    
     if (!selected) {
       selected = { r, c };
       render();
@@ -2147,6 +2329,39 @@
     }
     selected = null;
     render();
+  }
+
+  function handleRedPocketClick(r, c) {
+    // 清除同一行和同一列的所有格子
+    let cleared = 0;
+    for (let i = 0; i < size; i++) {
+      if (board[r][i] !== null) {
+        board[r][i] = null;
+        cleared++;
+      }
+      if (board[i][c] !== null && i !== r) {
+        board[i][c] = null;
+        cleared++;
+      }
+    }
+    // 加300分
+    score += 300;
+    updateScoreText();
+    // 显示特效
+    const fx = document.createElement("div");
+    fx.className = "coin-bonus-fx";
+    fx.textContent = "🧧 +300！";
+    fx.style.fontSize = "42px";
+    fx.style.color = "#ef4444";
+    gameWrapper.appendChild(fx);
+    setTimeout(() => {
+      fx.remove();
+    }, 2000);
+    // 应用重力并继续连锁
+    render();
+    setTimeout(() => {
+      cascadeStep();
+    }, 220);
   }
 
   function checkMatchesAndMark() {
@@ -2229,14 +2444,21 @@
         if (hasCoin) {
           points = 100;
           gotCoinBonus = true;
+        } else if (groupSize >= 6) {
+          // 6个或更多：60分
+          points = 60;
+        } else if (groupSize >= 5) {
+          // 5个：40分
+          points = 40;
         } else if (groupSize >= 4) {
-          // 小鹿角色：4 连加分从 +20 变 +25
-          points = selectedCharacter === "reindeer" ? 25 : 20;
+          // 4个：20分（小鹿角色：+25，原始版本不适用）
+          points = (selectedCharacter === "reindeer" && selectedCharacter !== "original") ? 25 : 20;
         } else {
+          // 3个：10分
           points = 10;
         }
-        // 圣诞树角色：三消加 +5 分
-        if (selectedCharacter === "tree") {
+        // 圣诞树角色：三消加 +5 分（原始版本不适用）
+        if (selectedCharacter === "tree" && selectedCharacter !== "original") {
           points += 5;
         }
         totalGained += points;
@@ -2306,6 +2528,341 @@
   // 初始化游戏和排行榜
   initBoard();
   renderLeaderboard();
+})();
+</script>
+
+<!-- 冰箱塞满挑战游戏 -->
+<div class="fridge-game-wrapper">
+  <div class="fridge-title">🧊 冰箱塞满挑战</div>
+  <div class="fridge-subtitle">30秒内尽可能把冰箱塞满！左右移动、旋转、快速下落，体验完美收纳的满足感～</div>
+
+  <div class="fridge-card">
+    <div class="fridge-info-bar">
+      <span>时间：<strong id="fridgeTime">30</strong> s</span>
+      <span>填满度：<strong id="fridgeFill">0</strong>%</span>
+    </div>
+
+    <div class="fridge-container">
+      <div id="fridgeBoard" class="fridge-board"></div>
+      <div class="fridge-controls">
+        <div style="margin-bottom:8px;">
+          <div style="font-size:12px; color:#6b7280; margin-bottom:4px;">下一个：</div>
+          <div id="fridgeNext" class="fridge-next"></div>
+        </div>
+        <div class="fridge-btn-row">
+          <button class="fridge-btn" id="fridgeLeft">←</button>
+          <button class="fridge-btn" id="fridgeRotate">↻</button>
+          <button class="fridge-btn" id="fridgeRight">→</button>
+        </div>
+        <button class="fridge-btn" id="fridgeDrop" style="width:100%;">快速下落 ⬇</button>
+        <button class="fridge-btn" id="fridgeStart" style="background:linear-gradient(135deg, #10b981, #34d399);">开始游戏</button>
+      </div>
+    </div>
+
+    <div id="fridgeResult" class="fridge-result"></div>
+    <div class="fridge-tip">提示：整行填满会自动消除并加分！塞得越满得分越高～</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const boardEl = document.getElementById("fridgeBoard");
+  const nextEl = document.getElementById("fridgeNext");
+  const timeEl = document.getElementById("fridgeTime");
+  const fillEl = document.getElementById("fridgeFill");
+  const startBtn = document.getElementById("fridgeStart");
+  const leftBtn = document.getElementById("fridgeLeft");
+  const rightBtn = document.getElementById("fridgeRight");
+  const rotateBtn = document.getElementById("fridgeRotate");
+  const dropBtn = document.getElementById("fridgeDrop");
+  const resultEl = document.getElementById("fridgeResult");
+
+  if (!boardEl || !nextEl) return;
+
+  const COLS = 10;
+  const ROWS = 16;
+  const GAME_TIME = 30;
+
+  // 食物形状定义（Tetris形状对应食物）
+  const SHAPES = {
+    I: { blocks: [[1,1,1,1]], emoji: "🥒", name: "黄瓜条" },
+    O: { blocks: [[1,1],[1,1]], emoji: "🥚", name: "鸡蛋盒" },
+    L: { blocks: [[1,0],[1,0],[1,1]], emoji: "🧃", name: "果汁盒" },
+    J: { blocks: [[0,1],[0,1],[1,1]], emoji: "🧀", name: "奶酪条" },
+    S: { blocks: [[0,1,1],[1,1,0]], emoji: "🥬", name: "青菜叶" },
+    Z: { blocks: [[1,1,0],[0,1,1]], emoji: "🍗", name: "小鸡腿" },
+    T: { blocks: [[1,1,1],[0,1,0]], emoji: "🍰", name: "小蛋糕" }
+  };
+
+  let board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
+  let currentPiece = null;
+  let nextPiece = null;
+  let currentX = 0;
+  let currentY = 0;
+  let score = 0;
+  let timeLeft = GAME_TIME;
+  let timerId = null;
+  let fallId = null;
+  let running = false;
+  let fallSpeed = 1000; // 初始下落速度
+
+  function initBoard() {
+    boardEl.innerHTML = "";
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const cell = document.createElement("div");
+        cell.className = "fridge-cell";
+        cell.dataset.row = r;
+        cell.dataset.col = c;
+        boardEl.appendChild(cell);
+      }
+    }
+  }
+
+  function createPiece() {
+    const shapes = Object.keys(SHAPES);
+    const shapeKey = shapes[Math.floor(Math.random() * shapes.length)];
+    const shape = SHAPES[shapeKey];
+    return {
+      blocks: shape.blocks.map(row => [...row]),
+      emoji: shape.emoji,
+      name: shape.name
+    };
+  }
+
+  function renderNext() {
+    nextEl.innerHTML = "";
+    if (!nextPiece) return;
+    const size = 4;
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        const cell = document.createElement("div");
+        cell.className = "fridge-next-cell";
+        if (r < nextPiece.blocks.length && c < nextPiece.blocks[0].length && nextPiece.blocks[r][c]) {
+          cell.classList.add("filled");
+          cell.textContent = nextPiece.emoji;
+        }
+        nextEl.appendChild(cell);
+      }
+    }
+  }
+
+  function canPlace(blocks, x, y) {
+    for (let r = 0; r < blocks.length; r++) {
+      for (let c = 0; c < blocks[r].length; c++) {
+        if (blocks[r][c]) {
+          const newX = x + c;
+          const newY = y + r;
+          if (newX < 0 || newX >= COLS || newY >= ROWS) return false;
+          if (newY >= 0 && board[newY][newX]) return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  function placePiece() {
+    for (let r = 0; r < currentPiece.blocks.length; r++) {
+      for (let c = 0; c < currentPiece.blocks[r].length; c++) {
+        if (currentPiece.blocks[r][c]) {
+          const y = currentY + r;
+          const x = currentX + c;
+          if (y >= 0) {
+            board[y][x] = 1;
+          }
+        }
+      }
+    }
+    checkLines();
+    spawnNext();
+  }
+
+  function checkLines() {
+    let linesCleared = 0;
+    for (let r = ROWS - 1; r >= 0; r--) {
+      if (board[r].every(cell => cell === 1)) {
+        board.splice(r, 1);
+        board.unshift(Array(COLS).fill(0));
+        linesCleared++;
+        r++;
+      }
+    }
+    if (linesCleared > 0) {
+      score += linesCleared * 100;
+      updateFill();
+    }
+  }
+
+  function spawnNext() {
+    currentPiece = nextPiece || createPiece();
+    nextPiece = createPiece();
+    currentX = Math.floor((COLS - currentPiece.blocks[0].length) / 2);
+    currentY = -currentPiece.blocks.length;
+    renderNext();
+    if (!canPlace(currentPiece.blocks, currentX, currentY)) {
+      endGame();
+    }
+  }
+
+  function render() {
+    const cells = boardEl.querySelectorAll(".fridge-cell");
+    cells.forEach(cell => {
+      cell.classList.remove("filled");
+      cell.textContent = "";
+    });
+
+    // 渲染已放置的块
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        if (board[r][c]) {
+          const idx = r * COLS + c;
+          if (cells[idx]) {
+            cells[idx].classList.add("filled");
+            cells[idx].textContent = "📦";
+          }
+        }
+      }
+    }
+
+    // 渲染当前下落的块
+    if (currentPiece) {
+      for (let r = 0; r < currentPiece.blocks.length; r++) {
+        for (let c = 0; c < currentPiece.blocks[r].length; c++) {
+          if (currentPiece.blocks[r][c]) {
+            const y = currentY + r;
+            const x = currentX + c;
+            if (y >= 0 && y < ROWS && x >= 0 && x < COLS) {
+              const idx = y * COLS + x;
+              if (cells[idx]) {
+                cells[idx].classList.add("filled");
+                cells[idx].textContent = currentPiece.emoji;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function updateFill() {
+    let filled = 0;
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        if (board[r][c]) filled++;
+      }
+    }
+    const fillPercent = Math.floor((filled / (ROWS * COLS)) * 100);
+    fillEl.textContent = fillPercent;
+  }
+
+  function movePiece(dx, dy) {
+    if (!currentPiece || !running) return;
+    if (canPlace(currentPiece.blocks, currentX + dx, currentY + dy)) {
+      currentX += dx;
+      currentY += dy;
+      render();
+      return true;
+    }
+    return false;
+  }
+
+  function rotatePiece() {
+    if (!currentPiece || !running) return;
+    const rotated = currentPiece.blocks[0].map((_, i) =>
+      currentPiece.blocks.map(row => row[i]).reverse()
+    );
+    if (canPlace(rotated, currentX, currentY)) {
+      currentPiece.blocks = rotated;
+      render();
+    }
+  }
+
+  function dropPiece() {
+    if (!currentPiece || !running) return;
+    while (movePiece(0, 1)) {}
+    placePiece();
+    render();
+  }
+
+  function fall() {
+    if (!running) return;
+    if (!movePiece(0, 1)) {
+      placePiece();
+      render();
+    }
+  }
+
+  function startGame() {
+    if (running) return;
+    running = true;
+    board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
+    score = 0;
+    timeLeft = GAME_TIME;
+    fallSpeed = 1000;
+    resultEl.textContent = "";
+    startBtn.disabled = true;
+    startBtn.textContent = "游戏中...";
+    spawnNext();
+    render();
+    updateFill();
+
+    timerId = setInterval(() => {
+      timeLeft--;
+      timeEl.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        endGame();
+      }
+    }, 1000);
+
+    fallId = setInterval(fall, fallSpeed);
+  }
+
+  function endGame() {
+    running = false;
+    clearInterval(timerId);
+    clearInterval(fallId);
+    timerId = null;
+    fallId = null;
+    startBtn.disabled = false;
+    startBtn.textContent = "再玩一局";
+
+    const filled = parseInt(fillEl.textContent);
+    let comment = "";
+    if (filled >= 80) {
+      comment = "冰箱收纳天才！你的整理能力让所有妈妈都羡慕～";
+    } else if (filled >= 60) {
+      comment = "优秀！已经是资深收纳达人了～";
+    } else if (filled >= 40) {
+      comment = "不错不错，再练几局就能成为冰箱管理大师～";
+    } else {
+      comment = "继续加油！多玩几局手就热起来了～";
+    }
+
+    resultEl.innerHTML = `本局填满度 <strong>${filled}%</strong><br>${comment}`;
+  }
+
+  // 事件监听
+  startBtn.addEventListener("click", startGame);
+  leftBtn.addEventListener("click", () => movePiece(-1, 0));
+  rightBtn.addEventListener("click", () => movePiece(1, 0));
+  rotateBtn.addEventListener("click", rotatePiece);
+  dropBtn.addEventListener("click", dropPiece);
+
+  // 键盘控制
+  window.addEventListener("keydown", (e) => {
+    if (!running) return;
+    if (e.key === "ArrowLeft") movePiece(-1, 0);
+    if (e.key === "ArrowRight") movePiece(1, 0);
+    if (e.key === "ArrowUp") rotatePiece();
+    if (e.key === "ArrowDown" || e.key === " ") {
+      e.preventDefault();
+      dropPiece();
+    }
+  });
+
+  // 初始化
+  initBoard();
+  renderNext();
 })();
 </script>
 
