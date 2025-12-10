@@ -753,41 +753,50 @@
       color:#e11d48;
     }
 
+    /* === PERFECT SQUARE RESPONSIVE BOARD === */
     #xmas-game-board {
-      width: 320px;
-      height: 320px;
-      display:grid;
+      width: 100%;
+      max-width: 92vw;         /* almost full screen on iPhone */
+      aspect-ratio: 1 / 1;     /* ★ this forces a perfect square */
+
+      margin: 0 auto 32px;     /* center horizontally */
+
+      padding: 12px;
+      box-sizing: border-box;  /* ★ ensures padding does NOT break aspect ratio */
+
+      display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-template-rows: repeat(8, 1fr);
-      gap:6px;
-      padding:8px;
-      border-radius:20px;
+      gap: 6px;
+
+      border-radius: 22px;
+
       background:
         radial-gradient(circle at top, rgba(254,249,195,.8), transparent 70%),
         radial-gradient(circle at bottom, rgba(254,226,226,.8), transparent 70%),
         #fefce8;
-      box-shadow:0 10px 20px rgba(248,181,82,.45) inset;
+
+      box-shadow: 0 10px 20px rgba(248,181,82,.45) inset;
     }
 
     .xmas-cell {
       width: 100%;
-      aspect-ratio: 1/1;
-      border-radius: 10px;
-      font-size: 24px;
+      height: 100%;     /* each cell becomes square */
+
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #ffffffee;
-      cursor: pointer;
-      user-select: none;
+
+      border-radius: 12px;
       box-sizing: border-box;
+
+      font-size: clamp(20px, 5vw, 32px);
+
+      background: #ffffffee;
       border: 2px solid transparent;
-      box-shadow: 0 4px 8px rgba(148, 163, 184, 0.5);
-      transition:
-        transform 0.2s ease,
-        border 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+      box-shadow: 0 4px 8px rgba(148,163,184,0.5);
+
+      transition: transform .2s ease, box-shadow .2s ease;
     }
 
     .xmas-cell:hover {
@@ -809,10 +818,7 @@
     }
 
     @media (max-width:480px){
-      #xmas-game-board{
-        width:280px;
-        height:280px;
-      }
+      /* keep only this if you want bigger emojis on phone */
       .xmas-cell{
         font-size:22px;
       }
@@ -824,76 +830,6 @@
       100% { transform: scale(1.08) rotate(-2deg) translateY(0); }
     }
 
-    /* 角色选择样式 */
-    #xmas-character-select {
-      margin: 12px 0;
-      padding: 12px;
-      background: linear-gradient(145deg, #fff7ed, #ffe3d1);
-      border-radius: 16px;
-      border: 2px solid rgba(248,200,200,.8);
-    }
-
-    #xmas-character-select h3 {
-      font-size: 15px;
-      margin: 0 0 10px;
-      color: #b91c1c;
-      text-align: center;
-    }
-
-    .xmas-characters {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    @media (min-width: 480px) {
-      .xmas-characters {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .xmas-char-btn {
-      padding: 10px;
-      border: 2px solid rgba(148,163,184,.6);
-      border-radius: 12px;
-      background: #ffffff;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .xmas-char-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(248,113,113,.4);
-      border-color: #fb7185;
-    }
-
-    .xmas-char-btn.selected {
-      background: linear-gradient(135deg, #fee2e2, #fef3c7);
-      border-color: #fb7185;
-      box-shadow: 0 0 0 2px rgba(248,113,113,.3);
-      font-weight: 700;
-    }
-
-    .xmas-char-btn .char-emoji {
-      font-size: 28px;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .xmas-char-btn .char-name {
-      font-weight: 600;
-      color: #7f1d1d;
-      margin-bottom: 2px;
-    }
-
-    .xmas-char-btn .char-bonus {
-      font-size: 11px;
-      color: #92400e;
-    }
 
     /* 哄娃大师游戏样式 */
     .baby-game-wrapper {
@@ -1924,61 +1860,105 @@
 <div class="sweet-game-wrapper" style="max-width: 520px; margin: 40px auto 0; padding: 16px 12px 32px;">
   <div class="sweet-card" id="xmas-game-card">
     <h2>🎮 圣诞消消乐 · 小游戏区</h2>
-    <!-- 规则说明 -->
-    <div class="sweet-subtitle" style="font-size:13px; line-height:1.5; margin-top:4px; text-align:left;">
-      规则：在 1 分钟内 点击两格交换，连成 3 个相同图案 即可消除得分。<br>
-      时间到会锁定分数，可选择记录到本页 TOP 20 全网排行榜～
+
+    <!-- 📱 简版 + 最新平衡版规则说明 -->
+    <div class="sweet-subtitle" style="font-size:12px; line-height:1.45; margin-top:6px; text-align:left;">
+      ⏱️ <b>基础规则</b>：默认 60 秒内，点击两格交换 → 连成 3 个及以上相同图案即可消除并得分。<br>
+      英雄会改变本局的时间 / 金币掉落概率 / 3 连得分 / 是否出现红包。时间到后，如果想要，可以把本局成绩记录到 <b>全网 TOP 20 排行榜</b>。
     </div>
-    <!-- 新增金币 + 计分说明（小字） -->
-    <div class="sweet-subtitle" style="font-size:12px; line-height:1.5; margin:6px 0 8px; text-align:left;">
-      ✨ 新增金币 🟡 大加分<br>
-      游戏进行 30 秒后，会从上方随机掉落 金币 🟡<br>
-      金币参与三消可获得 100 分超级奖励<br>
-      ✨ 计分方式<br>
-      3 个连在一起：+10 分<br>
-      4 个或更多 / L 型 / T 型：+20 分<br>
-      含金币组：直接 +100 分
+
+    <div class="sweet-subtitle" style="font-size:12px; line-height:1.45; margin-top:4px; text-align:left;">
+      🟡 <b>金币与计分</b>：游戏进行 30 秒后，开始有几率从上方掉落金币 🟡。<br>
+      · 默认金币掉落概率 ≈ <b>20%</b><br>
+      · 使用 <b>圣诞金币佬 🟡</b> 英雄时，金币掉落概率提升为 <b>≈30%</b><br>
+      ✨ <b>基础计分（不含金币额外加成）</b>：<br>
+      · 3 连：+10 分（<b>圣诞学霸 📚 为 +12 分</b>）<br>
+      · 4 连：+20 分<br>
+      · 5 连：+30 分<br>
+      · 6 连及以上：+40 分<br>
+      金币参与消除的组合，会在此基础上获得更高的总分（约 110～140 分一组），并显示金币特效。
     </div>
-    <!-- 角色选择区域 -->
-    <div id="xmas-character-select">
-      <h3>🎭 选择你的英雄</h3>
-      <div class="xmas-characters">
-        <div class="xmas-char-btn" data-char="original">
-          <span class="char-emoji">🎮</span>
-          <div class="char-name">原始版本</div>
-          <div class="char-bonus">经典玩法，无特殊加成</div>
-        </div>
-        <div class="xmas-char-btn" data-char="santa">
-          <span class="char-emoji">🎅</span>
-          <div class="char-name">圣诞老人</div>
-          <div class="char-bonus">金币出现概率 +10%</div>
-        </div>
-        <div class="xmas-char-btn" data-char="tree">
-          <span class="char-emoji">🎄</span>
-          <div class="char-name">圣诞树怪</div>
-          <div class="char-bonus">三消加 +5 分</div>
-        </div>
-        <div class="xmas-char-btn" data-char="snowman">
-          <span class="char-emoji">⛄</span>
-          <div class="char-name">圣诞雪人</div>
-          <div class="char-bonus">每局开始额外 +5 秒</div>
-        </div>
-        <div class="xmas-char-btn" data-char="reindeer">
-          <span class="char-emoji">🦌</span>
-          <div class="char-name">圣诞鹿鹿</div>
-          <div class="char-bonus">4 连加分从 +20 变 +25</div>
-        </div>
+
+    <div class="sweet-subtitle" style="font-size:12px; line-height:1.45; margin-top:4px; margin-bottom:6px; text-align:left;">
+      👾 <b>英雄效果总览（需先选择英雄 → 点击"确认英雄并开始本局"）</b><br>
+      · 🎄 原版模式：60 秒，基础规则。<br>
+      · ⏱️ 圣诞时光机：本局时间变为 <b>65 秒</b>。<br>
+      · 🟡 圣诞金币佬：金币掉落概率从约 20% 提升到约 <b>30%</b>，更容易刷金币高分。<br>
+      · 📚 圣诞学霸：普通 3 连每组 <b>+12 分</b>，其余连消分数不变。<br>
+      · 🧧 圣诞嘉年华：本局 60 秒内，<b>必定</b>在约第 <b>15～25 秒</b> 出现一个红包格子 🧧；点击红包立刻获得 <b>+100 分</b>，同时整盘棋盘会<b>重新刷新</b>一次。<br>
+      本局结束后，如果没有重新更换英雄，系统会自动记住你上一次选择的英雄设置。
+    </div>
+
+    <!-- 🧙‍♀️ 英雄选择区：就在棋盘上方 -->
+    <div id="xmas-hero-panel"
+         style="margin:8px 0 10px; padding:8px 10px; border-radius:14px;
+                background:#fefce8; border:1px dashed rgba(234,179,8,.8); font-size:12px;">
+      <div style="font-weight:700; margin-bottom:6px; color:#92400e;">
+        请选择本局要使用的英雄：
       </div>
+
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <label style="display:flex; align-items:flex-start; gap:6px;">
+          <input type="radio" name="xmasHero" value="normal" id="xmas-hero-normal" checked />
+          <span>
+            🎄 <b>原版模式</b><br>
+            <span style="color:#6b7280;">60 秒，基础金币概率，3 连 10 分，适合第一次试玩。</span>
+          </span>
+        </label>
+
+        <label style="display:flex; align-items:flex-start; gap:6px;">
+          <input type="radio" name="xmasHero" value="time" id="xmas-hero-time" />
+          <span>
+            ⏱️ <b>圣诞时光机</b><br>
+            <span style="color:#6b7280;">本局时间延长为 65 秒，操作空间更大，但也要更能"卷"。</span>
+          </span>
+        </label>
+
+        <label style="display:flex; align-items:flex-start; gap:6px;">
+          <input type="radio" name="xmasHero" value="coin" id="xmas-hero-coin" />
+          <span>
+            🟡 <b>圣诞金币佬</b><br>
+            <span style="color:#6b7280;">金币掉落概率 ≈30%，适合喜欢赌"金币大爆发"的玩家。</span>
+          </span>
+        </label>
+
+        <label style="display:flex; align-items:flex-start; gap:6px;">
+          <input type="radio" name="xmasHero" value="study" id="xmas-hero-study" />
+          <span>
+            📚 <b>圣诞学霸</b><br>
+            <span style="color:#6b7280;">普通 3 连每组 12 分，稳定慢慢攒分的"学霸路线"。</span>
+          </span>
+        </label>
+
+        <label style="display:flex; align-items:flex-start; gap:6px;">
+          <input type="radio" name="xmasHero" value="carnival" id="xmas-hero-carnival" />
+          <span>
+            🧧 <b>圣诞嘉年华</b>（偏娱乐向）<br>
+            <span style="color:#6b7280;">15–25 秒必掉一个红包格子，点中立刻 +100 分并刷新全盘，波动较大但很好玩。</span>
+          </span>
+        </label>
+      </div>
+
+      <button id="xmas-hero-confirm"
+              style="margin-top:8px; padding:6px 14px; font-size:12px;
+                     border-radius:999px; border:none; cursor:pointer;
+                     background:linear-gradient(135deg,#f97316,#facc15); color:#111827;
+                     box-shadow:0 6px 14px rgba(248,181,82,.6);">
+        ✅ 确认英雄并开始本局
+      </button>
     </div>
+
     <!-- 实际游戏区域 -->
     <div id="xmas-game">
       <div id="xmas-game-score">分数：0</div>
       <div id="xmas-game-timer">剩余时间：60 秒</div>
       <button id="xmas-game-restart" disabled>再玩一局</button>
+
       <div id="xmas-game-board"></div>
+
       <div style="margin-top:12px; width:100%; max-width:360px;">
-        <h3 style="font-size:14px; margin:0 0 4px; color:#b91c1c;">
-          🏆 全网 TOP 20 榜单（前 10 名有奖）
+        <h3 style="font-size:14px; margin:8px 0 6px; color:#b91c1c; text-align:center;">
+          🏆 全网 TOP 20 榜单<br>（前 10 名有奖）
         </h3>
         <div id="xmas-leaderboard"></div>
       </div>
@@ -1986,9 +1966,9 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
 (function(){
+
   const boardDiv       = document.getElementById("xmas-game-board");
   const scoreDiv       = document.getElementById("xmas-game-score");
   const timerDiv       = document.getElementById("xmas-game-timer");
@@ -1996,61 +1976,84 @@
   const leaderboardDiv = document.getElementById("xmas-leaderboard");
   const gameWrapper    = document.getElementById("xmas-game");
 
+  const heroPanel      = document.getElementById("xmas-hero-panel");
+  const heroConfirmBtn = document.getElementById("xmas-hero-confirm");
+  const heroRadios     = document.querySelectorAll('input[name="xmasHero"]');
+
   if (!boardDiv || !scoreDiv || !timerDiv || !leaderboardDiv || !gameWrapper) return;
 
-  // 🔗 这里用你自己的 Apps Script Web App URL（保持你现在的那条）
-  const LEADERBOARD_ENDPOINT = "https://script.google.com/macros/s/AKfycbxegT5Fx3PmB_9EAqG8CBpKculqNv4scbLuC0rKKIgn3WFCDFqUO6iVAJL-aHG_-CM_PA/exec";
+  // 🔗 排行榜接口（沿用你原来的 Apps Script）
+  const LEADERBOARD_ENDPOINT = "https://script.google.com/macros/s/AKfycbwyCPMdYS_Rt1s4df_cXi4VWTPHez4GF_QK7D3OyHgigfoTvK8V14KTYUSPHA3beYG1nQ/exec";
 
-  const BASE_ICONS   = ["🎄","🎅","❄️","🎁","🦌","⛄"];
-  const COIN_ICON    = "🟡";
-  const RED_POCKET_ICON = "🧧";
-  const size         = 8;
-  let GAME_SECONDS = 60; // 改为 let，因为雪人角色会修改它
+  const BASE_ICONS       = ["🎄","🎅","❄️","🎁","🦌","⛄"];
+  const COIN_ICON        = "🟡";
+  const RED_POCKET_ICON  = "🧧";
+  const size             = 8;
 
+  // 👾 英雄配置（已按你要求平衡）
+  const HEROES = {
+    normal: {
+      id: "normal",
+      name: "原版模式 🎄",
+      seconds: 60,
+      coinChance: 0.20,   // 默认金币掉落概率
+      threeScore: 10,
+      enableRedPocket: false
+    },
+    time: {
+      id: "time",
+      name: "圣诞时光机 ⏱️",
+      seconds: 65,        // ✅ 65 秒
+      coinChance: 0.20,
+      threeScore: 10,
+      enableRedPocket: false
+    },
+    coin: {
+      id: "coin",
+      name: "圣诞金币佬 🟡",
+      seconds: 60,
+      coinChance: 0.30,   // ✅ 金币掉落约 30%
+      threeScore: 10,
+      enableRedPocket: false
+    },
+    study: {
+      id: "study",
+      name: "圣诞学霸 📚",
+      seconds: 60,
+      coinChance: 0.20,
+      threeScore: 12,     // ✅ 3 连 = 12 分
+      enableRedPocket: false
+    },
+    carnival: {
+      id: "carnival",
+      name: "圣诞嘉年华 🧧",
+      seconds: 60,
+      coinChance: 0.20,
+      threeScore: 10,
+      enableRedPocket: true   // ✅ 本局会掉红包
+    }
+  };
+
+  const HERO_STORAGE_KEY = "xmas-match3-hero";
+
+  let currentHero = HEROES.normal;
   let board = [];
   let selected = null;
   let score = 0;
-  let timeLeft = GAME_SECONDS;
+  let timeLeft = currentHero.seconds;
   let timerId = null;
   let gameOver = false;
   let hasStarted = false;
-  let selectedCharacter = null; // 选中的角色
 
-  /* ========== 角色选择功能 ========== */
-  const charSelectDiv = document.getElementById("xmas-character-select");
-  if (charSelectDiv) {
-    const charButtons = charSelectDiv.querySelectorAll(".xmas-char-btn");
+  // 未确认英雄前，不允许点击棋盘
+  let allowPlay = false;
 
-    charButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        // 移除其他按钮的选中状态
-        charButtons.forEach(b => b.classList.remove("selected"));
-        // 添加当前按钮的选中状态
-        btn.classList.add("selected");
-        selectedCharacter = btn.dataset.char;
-        // 如果游戏还没开始，更新显示的初始时间
-        if (!hasStarted && !gameOver) {
-          const baseTime = 60;
-          GAME_SECONDS = (selectedCharacter === "snowman" && selectedCharacter !== "original") ? baseTime + 5 : baseTime;
-          timeLeft = GAME_SECONDS;
-          updateTimerText();
-        }
-      });
-    });
+  // 嘉年华专用红包状态
+  let redPocketEnabled = false;
+  let redPocketAppeared = false;
+  let redPocketTriggerSecond = null; // 第几秒掉红包
 
-    // 默认选择第一个角色
-    if (charButtons.length > 0) {
-      charButtons[0].classList.add("selected");
-      selectedCharacter = charButtons[0].dataset.char;
-      // 初始化时也设置正确的时间
-      const baseTime = 60;
-      GAME_SECONDS = (selectedCharacter === "snowman" && selectedCharacter !== "original") ? baseTime + 5 : baseTime;
-      timeLeft = GAME_SECONDS;
-      updateTimerText();
-    }
-  }
-
-  /* ========== 排行榜接口：后端返回 top20，前端高亮前 10 ========== */
+  /* ========== 排行榜接口 ========== */
   async function fetchLeaderboard() {
     try {
       const res = await fetch(LEADERBOARD_ENDPOINT + "?action=list", {
@@ -2059,8 +2062,14 @@
       });
       if (!res.ok) throw new Error("HTTP " + res.status);
       const data = await res.json();
-      const list = data.top20 || data.top10 || data.list || [];
-      return Array.isArray(list) ? list : [];
+
+      const rawList = data.top100 || data.top20 || data.top10 || data.list || [];
+      const list = Array.isArray(rawList) ? rawList.slice(0, 100) : [];
+
+      console.log("Leaderboard raw length =", Array.isArray(rawList) ? rawList.length : "not array");
+      console.log("Leaderboard used length =", list.length);
+
+      return list;
     } catch (e) {
       console.warn("加载排行榜失败：", e);
       return [];
@@ -2090,13 +2099,18 @@
     const list = await fetchLeaderboard();
     if (!list.length) {
       leaderboardDiv.innerHTML =
-        '<p class="sweet-subtitle" style="margin-top:6px;">当前还没有记录～赶紧来当第一个上榜的小可爱吧 🏆</p>';
+        '<p class="muted" style="margin-top:6px;">当前还没有记录～赶紧来当第一个上榜的小可爱吧 🏆</p>';
       return;
     }
 
-    let html = '<table style="width:100%; border-collapse:collapse; margin-top:10px; border-radius:18px; overflow:hidden; border:1px solid rgba(248,200,200,.9); background:#ffffff;"><thead><tr><th style="background:linear-gradient(145deg, #fee2e2, #fef9c3); color:#7f1d1d; font-weight:900; padding:6px 8px; text-align:left;">名次</th><th style="background:linear-gradient(145deg, #fee2e2, #fef9c3); color:#7f1d1d; font-weight:900; padding:6px 8px; text-align:left;">微信名</th><th style="background:linear-gradient(145deg, #fee2e2, #fef9c3); color:#7f1d1d; font-weight:900; padding:6px 8px; text-align:left;">得分</th><th style="background:linear-gradient(145deg, #fee2e2, #fef9c3); color:#7f1d1d; font-weight:900; padding:6px 8px; text-align:left;"></th></tr></thead><tbody>';
+    const top20 = list.slice(0, 20);
+    const extra = list.slice(20, 100);
 
-    list.forEach((item, idx) => {
+    let html = '<table><thead><tr><th>名次</th><th>微信名</th><th>得分</th><th></th></tr></thead>';
+
+    // TOP 1–20
+    html += '<tbody>';
+    top20.forEach((item, idx) => {
       const rank = idx + 1;
       const crown =
         rank === 1 ? "👑 " :
@@ -2106,16 +2120,61 @@
       const prizeBadge = isPrize
         ? '<span style="font-size:11px; margin-left:4px; color:#b45309;">⭐ 获奖区</span>'
         : '';
-      html += `<tr class="${isPrize ? 'lb-top10' : ''}" style="${isPrize ? 'background: linear-gradient(135deg,#fef9c3,#fee2e2); font-weight: 700;' : ''}">
-        <td style="padding:6px 8px; text-align:left; border-bottom:1px solid rgba(248,200,200,.7);">${rank}</td>
-        <td style="padding:6px 8px; text-align:left; border-bottom:1px solid rgba(248,200,200,.7);">${crown}${(item.name || "匿名")}</td>
-        <td style="padding:6px 8px; text-align:left; border-bottom:1px solid rgba(248,200,200,.7);">${item.score}</td>
-        <td style="padding:6px 8px; text-align:left; border-bottom:1px solid rgba(248,200,200,.7);">${prizeBadge}</td>
+      html += `<tr class="${isPrize ? 'lb-top10' : ''}">
+        <td>${rank}</td>
+        <td>${crown}${(item.name || "匿名")}</td>
+        <td>${item.score}</td>
+        <td>${prizeBadge}</td>
       </tr>`;
     });
+    html += '</tbody>';
 
-    html += "</tbody></table>";
+    // 21–100 折叠
+    if (extra.length) {
+      html += '<tbody id="lb-extra" style="display:none;">';
+      extra.forEach((item, idx) => {
+        const rank = 20 + idx + 1;
+        html += `<tr>
+          <td>${rank}</td>
+          <td>${(item.name || "匿名")}</td>
+          <td>${item.score}</td>
+          <td></td>
+        </tr>`;
+      });
+      html += '</tbody>';
+    }
+
+    html += '</table>';
+
+    if (extra.length) {
+      const maxRank = 20 + extra.length;
+      html += `
+        <button
+          id="lb-toggle"
+          class="secondary"
+          style="margin-top:6px; width:100%; font-size:12px;"
+        >
+          展开查看第 21–${maxRank} 名 👀
+        </button>
+      `;
+    }
+
     leaderboardDiv.innerHTML = html;
+
+    if (extra.length) {
+      const toggleBtn = document.getElementById('lb-toggle');
+      const extraTbody = document.getElementById('lb-extra');
+      let expanded = false;
+
+      toggleBtn.addEventListener('click', () => {
+        expanded = !expanded;
+        extraTbody.style.display = expanded ? '' : 'none';
+        const maxRank = 20 + extra.length;
+        toggleBtn.textContent = expanded
+          ? `收起第 21–${maxRank} 名 ⬆`
+          : `展开查看第 21–${maxRank} 名 👀`;
+      });
+    }
   }
 
   async function tryRecordScore(finalScore) {
@@ -2123,10 +2182,12 @@
       alert("这局分数还比较低，下次多消几个再来上榜也可以～");
       return;
     }
+
     const want = confirm(
       `时间到！本轮得分：${finalScore} 分。\n\n是否记录到本页 TOP 20 全网排行榜（前 10 名有奖）？`
     );
     if (!want) return;
+
     const name = prompt("请输入要显示在排行榜上的微信名：", "");
     if (name === null) return;
     const trimmed = (name || "").trim();
@@ -2134,20 +2195,81 @@
       alert("没有输入名字，这次就先不记录啦～");
       return;
     }
+
     await postScore(trimmed, finalScore);
     await renderLeaderboard();
   }
 
+  /* ========== 英雄选择相关 ========== */
+
+  function getSelectedHeroIdFromUI() {
+    let val = "normal";
+    heroRadios.forEach(r => {
+      if (r.checked) val = r.value;
+    });
+    return val;
+  }
+
+  function setHeroRadio(id) {
+    heroRadios.forEach(r => {
+      r.checked = (r.value === id);
+    });
+  }
+
+  function applyHero(heroId) {
+    const hero = HEROES[heroId] || HEROES.normal;
+    currentHero = hero;
+    timeLeft = currentHero.seconds;
+    redPocketEnabled    = !!currentHero.enableRedPocket;
+    redPocketAppeared   = false;
+    redPocketTriggerSecond = null;
+
+    try {
+      localStorage.setItem(HERO_STORAGE_KEY, currentHero.id);
+    } catch (e) {}
+
+    updateTimerText();
+  }
+
+  function loadHeroFromStorageOrDefault() {
+    let saved = null;
+    try {
+      saved = localStorage.getItem(HERO_STORAGE_KEY);
+    } catch (e) {}
+    if (!saved || !HEROES[saved]) saved = "normal";
+    setHeroRadio(saved);
+    applyHero(saved);
+  }
+
+  function setupHeroPanel() {
+    if (!heroPanel || !heroConfirmBtn) return;
+
+    heroConfirmBtn.addEventListener("click", () => {
+      const heroId = getSelectedHeroIdFromUI();
+      applyHero(heroId);
+
+      allowPlay = true;      // ✅ 确认英雄后才解锁棋盘
+      initBoard();           // 用当前英雄配置开新局
+
+      heroConfirmBtn.textContent = "✅ 已选择：" + currentHero.name + "（本局进行中）";
+      heroConfirmBtn.disabled = false;
+    });
+  }
+
   /* ========== 基础工具函数 ========== */
+
+  // 随机生成一个图标，30 秒后按当前英雄概率掉金币
   function randomIcon() {
-    const elapsed = hasStarted ? (GAME_SECONDS - timeLeft) : 0;
+    const total   = currentHero.seconds || 60;
+    const elapsed = hasStarted ? (total - timeLeft) : 0;
+
     if (hasStarted && elapsed >= 30) {
-      // 圣诞老人角色：金币出现概率从 20% 增加到 30%（原始版本不适用）
-      const coinProbability = (selectedCharacter === "santa" && selectedCharacter !== "original") ? 0.3 : 0.2;
-      if (Math.random() < coinProbability) {
+      const p = currentHero.coinChance ?? 0.20;
+      if (Math.random() < p) {
         return COIN_ICON;
       }
     }
+
     return BASE_ICONS[Math.floor(Math.random() * BASE_ICONS.length)];
   }
 
@@ -2231,7 +2353,6 @@
     }
   }
 
-  /* ========== 计分显示、倒计时、结束逻辑 ========== */
   function updateScoreText() {
     scoreDiv.textContent = "分数：" + score;
   }
@@ -2241,11 +2362,40 @@
   }
 
   function startTimerIfNeeded() {
-    if (hasStarted || gameOver) return;
+    if (!allowPlay || hasStarted || gameOver) return;
     hasStarted = true;
     restartBtn.disabled = true;
+
+    const total = currentHero.seconds || 60;
+
+    // 嘉年华英雄：红包触发时间固定在约 15～25 秒之间
+    if (currentHero.enableRedPocket && redPocketTriggerSecond == null) {
+      let min = 15;
+      let max = 25;
+
+      // 保险起见，做一下边界保护（防止以后改秒数）
+      max = Math.min(max, total - 5);       // 不要太靠近结尾
+      min = Math.max(5, Math.min(min, max)); // 最小不小于 5，且不超过 max
+
+      redPocketTriggerSecond = Math.floor(Math.random() * (max - min + 1)) + min;
+      redPocketEnabled = true;
+    }
+
     timerId = setInterval(() => {
       timeLeft--;
+      const elapsed = total - timeLeft;
+
+      // 红包掉落
+      if (
+        currentHero.enableRedPocket &&
+        redPocketEnabled &&
+        !redPocketAppeared &&
+        redPocketTriggerSecond != null &&
+        elapsed >= redPocketTriggerSecond
+      ) {
+        dropRedPocket();
+      }
+
       if (timeLeft <= 0) {
         timeLeft = 0;
         updateTimerText();
@@ -2279,12 +2429,44 @@
     }, 2000);
   }
 
-  /* ========== 游戏核心：初始化 / 渲染 / 三消逻辑（含 3/4/5 + 金币） ========== */
-  function initBoard() {
-    // 雪人角色：每局开始额外 +5 秒（原始版本不适用）
-    const baseTime = 60;
-    GAME_SECONDS = (selectedCharacter === "snowman" && selectedCharacter !== "original") ? baseTime + 5 : baseTime;
-    
+  /* ========== 红包逻辑（嘉年华） ========== */
+
+  function dropRedPocket() {
+    if (!currentHero.enableRedPocket || redPocketAppeared) return;
+    redPocketAppeared = true;
+
+    const col = Math.floor(Math.random() * size);
+    board[0][col] = RED_POCKET_ICON;
+    render();
+  }
+
+  function regenerateBoardOnly() {
+    generateFreshBoard();
+  }
+
+  function handleRedPocketClick(r, c) {
+    if (!currentHero.enableRedPocket || !redPocketAppeared) return;
+    if (board[r][c] !== RED_POCKET_ICON) return;
+
+    score += 100;
+    updateScoreText();
+
+    const fx = document.createElement("div");
+    fx.className = "coin-bonus-fx";
+    fx.textContent = "+100";
+    gameWrapper.appendChild(fx);
+    setTimeout(() => fx.remove(), 1200);
+
+    board[r][c] = null;
+    redPocketEnabled = false;
+
+    regenerateBoardOnly();
+    render();
+  }
+
+  /* ========== 棋盘初始化 ========== */
+
+  function generateFreshBoard() {
     while (true) {
       board = [];
       for (let r = 0; r < size; r++) {
@@ -2296,11 +2478,20 @@
       }
       if (hasAnyPossibleMove()) break;
     }
+  }
+
+  function initBoard() {
+    generateFreshBoard();
+
     selected = null;
     score = 0;
     gameOver = false;
     hasStarted = false;
-    timeLeft = GAME_SECONDS;
+    timeLeft = currentHero.seconds || 60;
+    redPocketAppeared = false;
+    redPocketTriggerSecond = null;
+    redPocketEnabled = !!currentHero.enableRedPocket;
+
     clearInterval(timerId);
     timerId = null;
     updateTimerText();
@@ -2309,16 +2500,25 @@
     render();
   }
 
+  /* ========== 棋盘渲染 / 点击 ========== */
+
   function render() {
     boardDiv.innerHTML = "";
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
         const cell = document.createElement("div");
         cell.className = "xmas-cell";
-        cell.textContent = board[r][c] || "";
+        const val = board[r][c] || "";
+        cell.textContent = val;
+
+        if (val === RED_POCKET_ICON) {
+          cell.classList.add("red-pocket");
+        }
+
         if (selected && selected.r === r && selected.c === c) {
           cell.classList.add("selected");
         }
+
         cell.onclick = () => select(r, c);
         boardDiv.appendChild(cell);
       }
@@ -2326,82 +2526,59 @@
   }
 
   function select(r, c) {
-    if (gameOver) return;
-    startTimerIfNeeded();
-    
-    // 检查是否点击了红包
-    if (board[r][c] === RED_POCKET_ICON) {
+    if (!allowPlay || gameOver) return;
+
+    // 嘉年华红包：点击直接触发，不需要交换
+    if (currentHero.enableRedPocket && board[r][c] === RED_POCKET_ICON) {
       handleRedPocketClick(r, c);
       return;
     }
-    
+
+    startTimerIfNeeded();
+
     if (!selected) {
       selected = { r, c };
       render();
       return;
     }
+
     const sr = selected.r;
     const sc = selected.c;
     const distance = Math.abs(sr - r) + Math.abs(sc - c);
+
     if (sr === r && sc === c) {
       selected = null;
       render();
       return;
     }
+
     if (distance === 1) {
       swap(sr, sc, r, c);
+
       if (!checkMatchesAndMark()) {
         swap(sr, sc, r, c);
       } else {
         startCascadeAnimation();
       }
     }
+
     selected = null;
     render();
   }
 
-  function handleRedPocketClick(r, c) {
-    // 清除同一行和同一列的所有格子
-    let cleared = 0;
-    for (let i = 0; i < size; i++) {
-      if (board[r][i] !== null) {
-        board[r][i] = null;
-        cleared++;
-      }
-      if (board[i][c] !== null && i !== r) {
-        board[i][c] = null;
-        cleared++;
-      }
-    }
-    // 加300分
-    score += 300;
-    updateScoreText();
-    // 显示特效
-    const fx = document.createElement("div");
-    fx.className = "coin-bonus-fx";
-    fx.textContent = "🧧 +300！";
-    fx.style.fontSize = "42px";
-    fx.style.color = "#ef4444";
-    gameWrapper.appendChild(fx);
-    setTimeout(() => {
-      fx.remove();
-    }, 2000);
-    // 应用重力并继续连锁
-    render();
-    setTimeout(() => {
-      cascadeStep();
-    }, 220);
-  }
+  /* ========== 三消 + 计分（含金币、英雄加成） ========== */
 
   function checkMatchesAndMark() {
     const mark = Array.from({ length: size }, () =>
       Array(size).fill(false)
     );
+
+    // 横向标记（不参与把红包当作普通连消）
     for (let r = 0; r < size; r++) {
       let c = 0;
       while (c < size) {
         const v = board[r][c];
-        if (!v) { c++; continue; }
+        if (!v || v === RED_POCKET_ICON) { c++; continue; }
         let c2 = c + 1;
         while (c2 < size && board[r][c2] === v) c2++;
         const len = c2 - c;
@@ -2413,11 +2590,13 @@
         c = c2;
       }
     }
+
+    // 纵向标记
     for (let c = 0; c < size; c++) {
       let r = 0;
       while (r < size) {
         const v = board[r][c];
-        if (!v) { r++; continue; }
+        if (!v || v === RED_POCKET_ICON) { r++; continue; }
         let r2 = r + 1;
         while (r2 < size && board[r2][c] === v) r2++;
         const len = r2 - r;
@@ -2429,6 +2608,8 @@
         r = r2;
       }
     }
+
+    // 检查是否有标记
     let anyMarked = false;
     for (let r = 0; r < size && !anyMarked; r++) {
       for (let c = 0; c < size && !anyMarked; c++) {
@@ -2436,26 +2617,32 @@
       }
     }
     if (!anyMarked) return false;
+
     const visited = Array.from({ length: size }, () =>
       Array(size).fill(false)
     );
     let totalGained = 0;
     let gotCoinBonus = false;
+
     const dr = [1,-1,0,0];
     const dc = [0,0,1,-1];
+
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
         if (!mark[r][c] || visited[r][c]) continue;
+
         const queue = [[r,c]];
         visited[r][c] = true;
         const cells = [];
         let groupSize = 0;
         let hasCoin = false;
+
         while (queue.length) {
           const [rr, cc] = queue.shift();
           cells.push([rr, cc]);
           groupSize++;
           if (board[rr][cc] === COIN_ICON) hasCoin = true;
+
           for (let k = 0; k < 4; k++) {
             const nr = rr + dr[k];
             const nc = cc + dc[k];
@@ -2469,33 +2656,42 @@
             }
           }
         }
+
         let points = 0;
+
         if (hasCoin) {
-          points = 100;
+          // 金币组：高分组（保持原来的 110～140 设定）
+          if (groupSize >= 6) {
+            points = 140;
+          } else if (groupSize === 5) {
+            points = 130;
+          } else if (groupSize === 4) {
+            points = 120;
+          } else {
+            points = 110;
+          }
           gotCoinBonus = true;
-        } else if (groupSize >= 6) {
-          // 6个或更多：60分
-          points = 60;
-        } else if (groupSize >= 5) {
-          // 5个：40分
-          points = 40;
-        } else if (groupSize >= 4) {
-          // 4个：20分（小鹿角色：+25，原始版本不适用）
-          points = (selectedCharacter === "reindeer" && selectedCharacter !== "original") ? 25 : 20;
         } else {
-          // 3个：10分
-          points = 10;
+          // 普通组：3 连用英雄 threeScore，其余和原值一致
+          if (groupSize >= 6) {
+            points = 40;
+          } else if (groupSize === 5) {
+            points = 30;
+          } else if (groupSize === 4) {
+            points = 20;
+          } else {
+            points = currentHero.threeScore || 10;  // ✅ 学霸 3 连 = 12 分
+          }
         }
-        // 圣诞树角色：三消加 +5 分（原始版本不适用）
-        if (selectedCharacter === "tree" && selectedCharacter !== "original") {
-          points += 5;
-        }
+
         totalGained += points;
+
         for (const [rr, cc] of cells) {
           board[rr][cc] = null;
         }
       }
     }
+
     if (totalGained > 0) {
       score += totalGained;
       updateScoreText();
@@ -2549,13 +2745,31 @@
     }, 220);
   }
 
-  /* ========== 再玩一局按钮 ========== */
+  /* ========== 按钮事件 + 初始化流程 ========== */
+
   restartBtn.addEventListener("click", () => {
+    if (!allowPlay) return;
     initBoard();
   });
 
-  // 初始化游戏和排行榜
-  initBoard();
+  // 1) 载入/应用上次英雄
+  loadHeroFromStorageOrDefault();
+
+  // 2) 有英雄面板就设置"确认英雄"逻辑；没有就默认允许玩
+  if (heroPanel && heroConfirmBtn && heroRadios.length) {
+    setupHeroPanel();
+
+    // 初始：显示一盘棋，但未确认英雄前 allowPlay=false → 锁盘
+    generateFreshBoard();
+    updateTimerText();
+    updateScoreText();
+    render();
+  } else {
+    allowPlay = true;
+    initBoard();
+  }
+
+  // 3) 排行榜
   renderLeaderboard();
 })();
 </script>

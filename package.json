@@ -1,0 +1,13 @@
+{
+  "name": "game-collection",
+  "version": "1.0.0",
+  "description": "游戏合集 - 准点下班大作战 & 掼蛋基础功 & 疯狂抢红包 & 甜品翻翻乐 & 圣诞消消乐 & 哄娃大师",
+  "scripts": {
+    "dev": "echo 'Static site - no build needed'",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "keywords": ["games", "html5", "christmas"],
+  "author": "",
+  "license": "MIT"
+}
+
