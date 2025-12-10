@@ -1864,15 +1864,14 @@
     <!-- 📱 简版 + 最新平衡版规则说明 -->
     <div class="sweet-subtitle" style="font-size:12px; line-height:1.45; margin-top:6px; text-align:left;">
       ⏱️ <b>基础规则</b>：默认 60 秒内，点击两格交换 → 连成 3 个及以上相同图案即可消除并得分。<br>
-      英雄会改变本局的时间 / 金币掉落概率 / 3 连得分 / 是否出现红包。时间到后，如果想要，可以把本局成绩记录到 <b>全网 TOP 20 排行榜</b>。
+      英雄会改变每局局势。游戏结束可以选择是否把本局成绩记录到 <b>全网 TOP 20 排行榜</b>。
     </div>
 
     <div class="sweet-subtitle" style="font-size:12px; line-height:1.45; margin-top:4px; text-align:left;">
-      🟡 <b>金币与计分</b>：游戏进行 30 秒后，开始有几率从上方掉落金币 🟡。<br>
-      · 默认金币掉落概率 ≈ <b>20%</b><br>
-      · 使用 <b>圣诞金币佬 🟡</b> 英雄时，金币掉落概率提升为 <b>≈30%</b><br>
-      ✨ <b>基础计分（不含金币额外加成）</b>：<br>
-      · 3 连：+10 分（<b>圣诞学霸 📚 为 +12 分</b>）<br>
+      🟡 <b>金币与计分</b>：游戏进行 30 秒后，开始随机金币 🟡。<br>
+      · 使用 <b>圣诞金币佬 🟡</b> 英雄时，金币掉落概率会提升 <b>≈10%</b><br>
+      ✨ <b>普通版基础计分</b>：<br>
+      · 3 连：+10 分<br>
       · 4 连：+20 分<br>
       · 5 连：+30 分<br>
       · 6 连及以上：+40 分<br>
@@ -1883,9 +1882,9 @@
       👾 <b>英雄效果总览（需先选择英雄 → 点击"确认英雄并开始本局"）</b><br>
       · 🎄 原版模式：60 秒，基础规则。<br>
       · ⏱️ 圣诞时光机：本局时间变为 <b>65 秒</b>。<br>
-      · 🟡 圣诞金币佬：金币掉落概率从约 20% 提升到约 <b>30%</b>，更容易刷金币高分。<br>
+      · 🟡 圣诞金币佬：金币掉落概率提升 <b>10%</b>，更容易刷金币高分。<br>
       · 📚 圣诞学霸：普通 3 连每组 <b>+12 分</b>，其余连消分数不变。<br>
-      · 🧧 圣诞嘉年华：本局 60 秒内，<b>必定</b>在约第 <b>15～25 秒</b> 出现一个红包格子 🧧；点击红包立刻获得 <b>+100 分</b>，同时整盘棋盘会<b>重新刷新</b>一次。<br>
+      · 🧧 圣诞嘉年华：每局<b>必定</b>在约第 <b>15～25 秒</b> 出现一个红包 🧧；点击红包不会额外加分，但会让整盘棋盘<b>重新刷新</b>一次，适合"洗牌求欧气"的娱乐局。<br>
       本局结束后，如果没有重新更换英雄，系统会自动记住你上一次选择的英雄设置。
     </div>
 
@@ -1933,8 +1932,8 @@
         <label style="display:flex; align-items:flex-start; gap:6px;">
           <input type="radio" name="xmasHero" value="carnival" id="xmas-hero-carnival" />
           <span>
-            🧧 <b>圣诞嘉年华</b>（偏娱乐向）<br>
-            <span style="color:#6b7280;">15–25 秒必掉一个红包格子，点中立刻 +100 分并刷新全盘，波动较大但很好玩。</span>
+            🧧 <b>圣诞嘉年华</b><br>
+            <span style="color:#6b7280;">15–25 秒必掉一个红包格子，点击红包不会额外加分，但会让整盘棋盘重新刷新一次，适合"洗牌求欧气"的娱乐局。</span>
           </span>
         </label>
       </div>
@@ -2076,12 +2075,26 @@
     }
   }
 
+  // ✅ 新增：根据当前英雄，生成写入 Sheet 的 Hero 文本
+  function getCurrentHeroLabel() {
+    switch (currentHero.id) {
+      case "normal":   return "原版";
+      case "time":     return "圣诞时光机";
+      case "coin":     return "圣诞金币佬";
+      case "study":    return "圣诞学霸";
+      case "carnival": return "圣诞嘉年华";
+      default:         return currentHero.name || currentHero.id || "";
+    }
+  }
+
   async function postScore(name, score) {
     try {
+      const heroLabel = getCurrentHeroLabel();   // ⭐ 把英雄名字也传出去
       const body = new URLSearchParams({
         action: "add",
         name: name,
-        score: String(score)
+        score: String(score),
+        hero: heroLabel
       });
       await fetch(LEADERBOARD_ENDPOINT, {
         method: "POST",
@@ -2444,19 +2457,12 @@
     generateFreshBoard();
   }
 
+  // ❗ 这里是你重点要求的改动：取消 +100 分和 "+100" 文本
   function handleRedPocketClick(r, c) {
     if (!currentHero.enableRedPocket || !redPocketAppeared) return;
     if (board[r][c] !== RED_POCKET_ICON) return;
 
-    score += 100;
-    updateScoreText();
-
-    const fx = document.createElement("div");
-    fx.className = "coin-bonus-fx";
-    fx.textContent = "+100";
-    gameWrapper.appendChild(fx);
-    setTimeout(() => fx.remove(), 1200);
-
+    // 不加分，不显示 "+100"，只做"刷新全盘"
     board[r][c] = null;
     redPocketEnabled = false;
 
