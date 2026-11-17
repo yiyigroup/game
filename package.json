@@ -1,13 +1,12 @@
 {
-  "name": "game-collection",
+  "name": "yiyi-tracking-snowman",
   "version": "1.0.0",
-  "description": "游戏合集 - 准点下班大作战 & 掼蛋基础功 & 疯狂抢红包 & 甜品翻翻乐 & 圣诞消消乐 & 哄娃大师",
+  "description": "一一团到货查询 & 《雪人下山大冒险》圣诞小游戏（单文件静态站）",
   "scripts": {
     "dev": "echo 'Static site - no build needed'",
     "build": "echo 'Static site - no build needed'"
   },
-  "keywords": ["games", "html5", "christmas"],
+  "keywords": ["games", "html5", "christmas", "snowman", "tracking"],
   "author": "",
   "license": "MIT"
 }
-
